@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using VirtualZoo.Enums;
 
 namespace VirtualZoo.Models
 {
@@ -10,6 +11,14 @@ namespace VirtualZoo.Models
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Animal> Animals { get; set; } = new List<Animal>();
+        public ICollection<Animal> Animals { get; set; }
+
+        public Climate Climate { get; set; }
+
+        public HabitatType HabitatType { get; set; }
+
+        public SecurityLevel SecurityLevel { get; set; }
+
+        public double Size { get; set; } // in square meters
     }
 }
