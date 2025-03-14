@@ -16,7 +16,7 @@ namespace VirtualZoo.Models
 
         public int CategoryId { get; set; }
 
-        // The Category property is a navigation property. Navigation properties hold other entities that are related to this entity.
+        // De Category-eigenschap is een navigatie-eigenschap. Navigatie-eigenschappen bevatten andere entiteiten die gerelateerd zijn aan deze entiteit.
         public Category Category { get; set; }
 
         public Size Size { get; set; }
@@ -29,7 +29,7 @@ namespace VirtualZoo.Models
 
         public int EnclosureId { get; set; }
 
-        // The Enclosure property is a navigation property. Navigation properties hold other entities that are related to this entity.
+        // De Enclosure-eigenschap is een navigatie-eigenschap. Navigatie-eigenschappen bevatten andere entiteiten die gerelateerd zijn aan deze entiteit.
         public Enclosure Enclosure { get; set; }
 
         public double SpaceRequirement { get; set; } //square meters/Animal
