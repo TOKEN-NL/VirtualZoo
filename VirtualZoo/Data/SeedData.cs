@@ -35,8 +35,8 @@ namespace VirtualZoo.Data
             // Dieren toevoegen
             var animals = new List<Animal>
             {
-                new Animal { Name = "Lion", Species = "Panthera leo", CategoryId = categories[0].Id, EnclosureId = enclosures[0].Id, Size = Size.Large, DietaryClass = DietaryClass.Carnivore, ActivityPattern = ActivityPattern.Diurnal, Prey = "Zebra", SpaceRequirement = 50, SecurityRequirement = SecurityLevel.Medium },
-                new Animal { Name = "Parrot", Species = "Psittaciformes", CategoryId = categories[1].Id, EnclosureId = enclosures[1].Id, Size = Size.Small, DietaryClass = DietaryClass.Omnivore, ActivityPattern = ActivityPattern.Diurnal, Prey = "Insects", SpaceRequirement = 2, SecurityRequirement = SecurityLevel.Low }
+                new Animal { Name = "Lion1", Species = "Panthera leo", CategoryId = categories[0].Id, EnclosureId = enclosures[0].Id, Size = Size.Large, DietaryClass = DietaryClass.Carnivore, ActivityPattern = ActivityPattern.Diurnal, Prey = "Zebra", SpaceRequirement = 50, SecurityRequirement = SecurityLevel.Medium },
+                new Animal { Name = "Parrot1", Species = "Psittaciformes", CategoryId = categories[1].Id, EnclosureId = enclosures[1].Id, Size = Size.Small, DietaryClass = DietaryClass.Omnivore, ActivityPattern = ActivityPattern.Diurnal, Prey = "Insects", SpaceRequirement = 2, SecurityRequirement = SecurityLevel.Low }
             };
             context.Animals.AddRange(animals);
             context.SaveChanges();
