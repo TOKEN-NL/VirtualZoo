@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using VirtualZoo.Models;
-using VirtualZoo.Enums;
+using VirtualZooShared.Models;
+using VirtualZooShared.Enums;
 
-namespace VirtualZoo.Data
+namespace VirtualZooAPI.Data
 {
     public static class SeedData
     {

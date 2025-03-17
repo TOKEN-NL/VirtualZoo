@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace VirtualZoo.Migrations
+namespace VirtualZooAPI.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -43,6 +43,10 @@ namespace VirtualZoo.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Climate = table.Column<int>(type: "int", nullable: false),
+                    HabitatType = table.Column<int>(type: "int", nullable: false),
+                    SecurityLevel = table.Column<int>(type: "int", nullable: false),
+                    Size = table.Column<double>(type: "float", nullable: false),
                     ZooId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -62,8 +66,15 @@ namespace VirtualZoo.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Species = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    EnclosureId = table.Column<int>(type: "int", nullable: false)
+                    Size = table.Column<int>(type: "int", nullable: false),
+                    DietaryClass = table.Column<int>(type: "int", nullable: false),
+                    ActivityPattern = table.Column<int>(type: "int", nullable: false),
+                    Prey = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EnclosureId = table.Column<int>(type: "int", nullable: false),
+                    SpaceRequirement = table.Column<double>(type: "float", nullable: false),
+                    SecurityRequirement = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

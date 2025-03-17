@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using VirtualZoo.Enums;
+using VirtualZooShared.Enums;
 
-namespace VirtualZoo.Models
+namespace VirtualZooShared.Models
 {
     public class Enclosure
     {

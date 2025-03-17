@@ -1,4 +1,4 @@
-﻿namespace VirtualZoo.Enums
+﻿namespace VirtualZooShared.Enums
 {
     public enum SecurityLevel
     {

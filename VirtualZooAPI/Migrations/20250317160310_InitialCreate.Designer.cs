@@ -4,15 +4,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VirtualZoo.Data;
-
+using VirtualZooAPI.Data;
 
 #nullable disable
 
-namespace VirtualZoo.Migrations
+namespace VirtualZooAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250313152839_InitialCreate")]
+    [Migration("20250317160310_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,12 +19,12 @@ namespace VirtualZoo.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("VirtualZoo.Models.Animal", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Animal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,13 +32,36 @@ namespace VirtualZoo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ActivityPattern")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DietaryClass")
                         .HasColumnType("int");
 
                     b.Property<int>("EnclosureId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SecurityRequirement")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SpaceRequirement")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Species")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -52,7 +74,7 @@ namespace VirtualZoo.Migrations
                     b.ToTable("Animals");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Category", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +91,7 @@ namespace VirtualZoo.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Enclosure", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Enclosure", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,9 +99,21 @@ namespace VirtualZoo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Climate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HabitatType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SecurityLevel")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Size")
+                        .HasColumnType("float");
 
                     b.Property<int?>("ZooId")
                         .HasColumnType("int");
@@ -91,7 +125,7 @@ namespace VirtualZoo.Migrations
                     b.ToTable("Enclosures");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Zoo", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Zoo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,15 +142,15 @@ namespace VirtualZoo.Migrations
                     b.ToTable("Zoos");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Animal", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Animal", b =>
                 {
-                    b.HasOne("VirtualZoo.Models.Category", "Category")
+                    b.HasOne("VirtualZooShared.Models.Category", "Category")
                         .WithMany("Animals")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("VirtualZoo.Models.Enclosure", "Enclosure")
+                    b.HasOne("VirtualZooShared.Models.Enclosure", "Enclosure")
                         .WithMany("Animals")
                         .HasForeignKey("EnclosureId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -127,24 +161,24 @@ namespace VirtualZoo.Migrations
                     b.Navigation("Enclosure");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Enclosure", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Enclosure", b =>
                 {
-                    b.HasOne("VirtualZoo.Models.Zoo", null)
+                    b.HasOne("VirtualZooShared.Models.Zoo", null)
                         .WithMany("Enclosures")
                         .HasForeignKey("ZooId");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Category", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Category", b =>
                 {
                     b.Navigation("Animals");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Enclosure", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Enclosure", b =>
                 {
                     b.Navigation("Animals");
                 });
 
-            modelBuilder.Entity("VirtualZoo.Models.Zoo", b =>
+            modelBuilder.Entity("VirtualZooShared.Models.Zoo", b =>
                 {
                     b.Navigation("Enclosures");
                 });

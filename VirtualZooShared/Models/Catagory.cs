@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VirtualZoo.Models
+namespace VirtualZooShared.Models
 {
     public class Category
     {
