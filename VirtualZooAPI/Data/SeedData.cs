@@ -8,9 +8,10 @@ namespace VirtualZooAPI.Data
     {
         public static void Initialize(ApplicationDbContext context)
         {
+            // Als er al data in de database zit, dan hoeft er geen data toegevoegd te worden
             if (context.Animals.Any() || context.Categories.Any() || context.Enclosures.Any() || context.Zoos.Any())
             {
-                return; // Database is al gevuld
+                return; 
             }
 
             // Categorieën toevoegen
