@@ -9,7 +9,6 @@ namespace VirtualZooShared.Factories
         public static Enclosure CreateEnclosure(int? id = null)
         {
             var faker = new Faker<Enclosure>()
-                .RuleFor(e => e.Id, f => id ?? 0)
                 .RuleFor(e => e.Name, f => "Enclosure " + f.Random.Number(1, 50))
                 .RuleFor(e => e.Climate, f => f.PickRandom<Climate>())
                 .RuleFor(e => e.HabitatType, f => f.PickRandom<HabitatType>())

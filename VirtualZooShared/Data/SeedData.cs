@@ -2,7 +2,7 @@
 using VirtualZooShared.Models;
 using VirtualZooShared.Enums;
 
-namespace VirtualZooAPI.Data
+namespace VirtualZooShared.Data
 {
     public static class SeedData
     {

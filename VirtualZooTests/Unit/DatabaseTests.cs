@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using VirtualZooAPI.Data;
+using VirtualZooShared.Data;
 using VirtualZooShared.Models;
 using VirtualZooShared.Enums;
 using Xunit;
@@ -14,7 +14,7 @@ namespace VirtualZooTests.Unit
         public DatabaseTests()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlServer("Server=.;Database=VirtualZooTest;Trusted_Connection=True;TrustServerCertificate=True;")
+                .UseSqlServer("Server=.;Database=VirtueleDierentuin11Test;Trusted_Connection=True;TrustServerCertificate=True;")
                 .Options;
 
             _context = new ApplicationDbContext(options);

@@ -43,7 +43,12 @@ namespace VirtualZooAPI.Controllers
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null) return NotFound();
-            return Ok(category);
+            return Ok(new
+            {
+                category.Id,
+                category.Name,
+                Animals = category.Animals ?? new List<Animal>() // Zorgt voor een lege lijst
+            });
         }
 
         /// <summary>
@@ -58,6 +63,7 @@ namespace VirtualZooAPI.Controllers
         public async Task<ActionResult> AddCategory([FromBody] Category category)
         {
             if (category == null) return BadRequest("Invalid category data.");
+            category.Animals ??= new List<Animal>();
             await _categoryService.AddCategoryAsync(category);
             return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, category);
         }

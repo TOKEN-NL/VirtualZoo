@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using VirtualZooAPI.Data;
+using VirtualZooShared.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

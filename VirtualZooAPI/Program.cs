@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using VirtualZooAPI.Data;
+using VirtualZooShared.Data;
 using VirtualZooAPI.Repositories.Implementations;
 using VirtualZooAPI.Repositories.Interfaces;
 using VirtualZooAPI.Services.Implementations;

@@ -4,7 +4,7 @@ using VirtualZooShared.Models;
 using VirtualZooAPI.Repositories.Interfaces;
 using VirtualZooAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using VirtualZooAPI.Data;
+using VirtualZooShared.Data;
 
 namespace VirtualZooAPI.Services.Implementations
 {
