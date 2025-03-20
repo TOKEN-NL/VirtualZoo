@@ -4,7 +4,7 @@ using VirtualZooShared.Models;
 using VirtualZooShared.Enums;
 using Xunit;
 
-namespace VirtualZooTests
+namespace VirtualZooTests.Unit
 {
 
     public class DatabaseTests : IDisposable

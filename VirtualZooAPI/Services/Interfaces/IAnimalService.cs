@@ -11,5 +11,6 @@ namespace VirtualZooAPI.Services.Interfaces
         Task AddAnimalAsync(Animal animal);
         Task UpdateAnimalAsync(Animal animal);
         Task DeleteAnimalAsync(int id);
+        
     }
 }

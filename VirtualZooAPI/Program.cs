@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// **Database migreren en seeding uitvoeren**
+// Database migreren en seeding uitvoeren
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -40,7 +40,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         context.Database.Migrate(); // Zorgt ervoor dat migraties worden toegepast
-        SeedData.Initialize(context); // **Voert de seeddata uit**
+        SeedData.Initialize(context); // Voert de seeddata uit
     }
     catch (Exception ex)
     {

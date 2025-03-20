@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using VirtualZooShared.Models;
 using VirtualZooAPI.Repositories.Interfaces;
 using VirtualZooAPI.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using VirtualZooAPI.Data;
 
 namespace VirtualZooAPI.Services.Implementations
 {
@@ -39,5 +41,6 @@ namespace VirtualZooAPI.Services.Implementations
         {
             await _animalRepository.DeleteAnimalAsync(id);
         }
+
     }
 }

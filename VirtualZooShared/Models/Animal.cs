@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using VirtualZooShared.Enums;
 
 namespace VirtualZooShared.Models
@@ -16,9 +17,6 @@ namespace VirtualZooShared.Models
 
         public int CategoryId { get; set; }
 
-        // De Category-eigenschap is een navigatie-eigenschap. Navigatie-eigenschappen bevatten andere entiteiten die gerelateerd zijn aan deze entiteit.
-        public Category Category { get; set; }
-
         public Size Size { get; set; }
 
         public DietaryClass DietaryClass { get; set; }
@@ -28,9 +26,6 @@ namespace VirtualZooShared.Models
         public string Prey { get; set; }
 
         public int EnclosureId { get; set; }
-
-        // De Enclosure-eigenschap is een navigatie-eigenschap. Navigatie-eigenschappen bevatten andere entiteiten die gerelateerd zijn aan deze entiteit.
-        public Enclosure Enclosure { get; set; }
 
         public double SpaceRequirement { get; set; } //square meters/Animal
 

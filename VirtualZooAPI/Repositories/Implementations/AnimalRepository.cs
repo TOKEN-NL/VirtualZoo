@@ -19,12 +19,12 @@ namespace VirtualZooAPI.Repositories.Implementations
 
         public async Task<IEnumerable<Animal>> GetAllAnimalsAsync()
         {
-            return await _context.Animals.Include(a => a.Category).Include(a => a.Enclosure).ToListAsync();
+            return await _context.Animals.ToListAsync();
         }
 
         public async Task<Animal> GetAnimalByIdAsync(int id)
         {
-            return await _context.Animals.Include(a => a.Category).Include(a => a.Enclosure)
+            return await _context.Animals
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
