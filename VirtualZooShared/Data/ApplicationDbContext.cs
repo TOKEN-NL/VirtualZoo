@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VirtualZooShared.Models;
 
-namespace VirtualZooAPI.Data
+namespace VirtualZooShared.Data
 {
     public class ApplicationDbContext : DbContext
     {

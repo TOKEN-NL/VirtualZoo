@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using VirtualZooAPI.Data;
+using VirtualZooShared.Data;
 using VirtualZooAPI.Repositories.Implementations;
 using VirtualZooAPI.Repositories.Interfaces;
 using VirtualZooAPI.Services.Implementations;
@@ -9,8 +9,12 @@ using VirtualZooAPI.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Animal
 builder.Services.AddScoped<IAnimalRepository, AnimalRepository>();
 builder.Services.AddScoped<IAnimalService, AnimalService>();
+// Category
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -27,7 +31,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VirtueleDierentuin API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VirtueleDierentuin API", Version = "v1", Description = "API voor het beheren van dieren in de virtuele dierentuin."});
+    c.EnableAnnotations();
 });
 
 var app = builder.Build();
@@ -39,8 +44,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate(); // Zorgt ervoor dat migraties worden toegepast
-        SeedData.Initialize(context); // Voert de seeddata uit
+        context.Database.Migrate(); 
+        SeedData.Initialize(context); 
     }
     catch (Exception ex)
     {

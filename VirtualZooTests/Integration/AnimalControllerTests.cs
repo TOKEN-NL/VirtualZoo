@@ -10,24 +10,32 @@ using VirtualZooAPI;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
-using System.Text.Json.Serialization;
 using System.Text.Json;
 
 namespace VirtualZooTests.Integration
 {
+    /// <summary>
+    /// Integration tests voor de AnimalController API endpoints.
+    /// </summary>
     public class AnimalControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
 
+        /// <summary>
+        /// Initialisatie van de testclient met aangepaste content root.
+        /// </summary>
         public AnimalControllerTests(WebApplicationFactory<Program> factory)
         {
             _client = factory.WithWebHostBuilder(builder =>
             {
                 var apiPath = Path.GetFullPath("../../../../VirtualZooAPI");
-                builder.UseContentRoot(apiPath); 
+                builder.UseContentRoot(apiPath);
             }).CreateClient();
         }
 
+        /// <summary>
+        /// Test of het ophalen van dieren een succesvolle response (200 OK) retourneert.
+        /// </summary>
         [Fact]
         public async Task GetAnimals_ShouldReturnOkResponse()
         {
@@ -43,14 +51,17 @@ namespace VirtualZooTests.Integration
             Assert.NotEmpty(animals);
         }
 
+        /// <summary>
+        /// Test of het aanmaken van een dier correct werkt en een 201 Created response geeft.
+        /// </summary>
         [Fact]
         public async Task PostAnimal_ShouldReturnCreatedResponse()
         {
             var newAnimal = AnimalFactory.CreateAnimal();
             var response = await _client.PostAsJsonAsync("/api/Animal", newAnimal);
-            var rawResponse = await response.Content.ReadAsStringAsync(); 
+            var rawResponse = await response.Content.ReadAsStringAsync();
 
-            response.EnsureSuccessStatusCode(); 
+            response.EnsureSuccessStatusCode();
             Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
 
             var createdAnimal = JsonSerializer.Deserialize<Animal>(rawResponse, new JsonSerializerOptions
@@ -62,7 +73,9 @@ namespace VirtualZooTests.Integration
             Assert.Equal(newAnimal.Name, createdAnimal.Name);
         }
 
-
+        /// <summary>
+        /// Test of een dier correct verwijderd kan worden en een 204 No Content response geeft.
+        /// </summary>
         [Fact]
         public async Task DeleteAnimal_ShouldReturnNoContentResponse()
         {
@@ -82,6 +95,5 @@ namespace VirtualZooTests.Integration
             var response = await _client.DeleteAsync($"/api/Animal/{createdAnimal.Id}");
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
         }
-
     }
 }
