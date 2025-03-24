@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using VirtualZooShared.Models;
+using VirtualZoo.Models;
 
 namespace VirtualZoo.Controllers
 {

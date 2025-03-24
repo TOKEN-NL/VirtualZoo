@@ -1,4 +1,4 @@
-namespace VirtualZooShared.Models
+namespace VirtualZoo.Models
 {
     public class ErrorViewModel
     {
