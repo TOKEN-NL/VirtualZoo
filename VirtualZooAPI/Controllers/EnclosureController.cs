@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using VirtualZooAPI.Services.Interfaces;
+using VirtualZooShared.Enums;
 using VirtualZooShared.Models;
 
 namespace VirtualZooAPI.Controllers
@@ -84,6 +85,98 @@ namespace VirtualZooAPI.Controllers
         {
             await _enclosureService.DeleteEnclosureAsync(id);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Geeft aan welke dieren in het verblijf wakker worden of gaan slapen.
+        /// </summary>
+        [HttpGet("{id}/sunrise")]
+        [SwaggerOperation(Summary = "Geeft aan welke dieren wakker worden of gaan slapen bij zonsopgang.")]
+        [SwaggerResponse(200, "Lijst met beschrijvingen van de status van de dieren.", typeof(List<string>))]
+        [SwaggerResponse(404, "Verblijf niet gevonden.")]
+        public async Task<ActionResult<List<string>>> Sunrise(int id)
+        {
+            var enclosure = await _enclosureService.GetEnclosureByIdAsync(id);
+            if (enclosure == null) return NotFound();
+
+            var result = enclosure.Animals.Select(a => $"{a.Name}: " + a.ActivityPattern switch
+            {
+                ActivityPattern.Diurnal => "wordt wakker.",
+                ActivityPattern.Nocturnal => "gaat slapen.",
+                ActivityPattern.Cathemeral => "is actief.",
+                _ => "heeft een onbekend patroon."
+            }).ToList();
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Geeft aan welke dieren in het verblijf wakker worden of gaan slapen bij zonsondergang.
+        /// </summary>
+        [HttpGet("{id}/sunset")]
+        [SwaggerOperation(Summary = "Geeft aan welke dieren wakker worden of gaan slapen bij zonsondergang.")]
+        [SwaggerResponse(200, "Lijst met beschrijvingen van de status van de dieren.", typeof(List<string>))]
+        [SwaggerResponse(404, "Verblijf niet gevonden.")]
+        public async Task<ActionResult<List<string>>> Sunset(int id)
+        {
+            var enclosure = await _enclosureService.GetEnclosureByIdAsync(id);
+            if (enclosure == null) return NotFound();
+
+            var result = enclosure.Animals.Select(a => $"{a.Name}: " + a.ActivityPattern switch
+            {
+                ActivityPattern.Diurnal => "gaat slapen.",
+                ActivityPattern.Nocturnal => "wordt wakker.",
+                ActivityPattern.Cathemeral => "is actief.",
+                _ => "heeft een onbekend patroon."
+            }).ToList();
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Geeft aan wat alle dieren in dit verblijf eten.
+        /// </summary>
+        [HttpGet("{id}/feedingtime")]
+        [SwaggerOperation(Summary = "Geeft aan wat alle dieren in dit verblijf eten.")]
+        [SwaggerResponse(200, "Lijst met wat elk dier eet.", typeof(List<string>))]
+        [SwaggerResponse(404, "Verblijf niet gevonden.")]
+        public async Task<ActionResult<List<string>>> FeedingTime(int id)
+        {
+            var enclosure = await _enclosureService.GetEnclosureByIdAsync(id);
+            if (enclosure == null) return NotFound();
+
+            var result = enclosure.Animals.Select(a => $"{a.Name}: " +
+                (a.DietaryClass == DietaryClass.Carnivore || a.DietaryClass == DietaryClass.Piscivore
+                    ? "eet andere dieren."
+                    : $"eet {a.Prey}.")).ToList();
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Controleert of het verblijf voldoet aan de ruimte- en beveiligingseisen.
+        /// </summary>
+        [HttpGet("{id}/checkconstraints")]
+        [SwaggerOperation(Summary = "Controleert of het verblijf voldoet aan ruimte- en beveiligingseisen.")]
+        [SwaggerResponse(200, "Lijst met bevindingen of bevestiging dat alles in orde is.", typeof(List<string>))]
+        [SwaggerResponse(404, "Verblijf niet gevonden.")]
+        public async Task<ActionResult<List<string>>> CheckConstraints(int id)
+        {
+            var enclosure = await _enclosureService.GetEnclosureByIdAsync(id);
+            if (enclosure == null) return NotFound();
+
+            var issues = new List<string>();
+            double totalRequired = enclosure.Animals.Sum(a => a.SpaceRequirement);
+            if (totalRequired > enclosure.Size)
+                issues.Add("Te weinig ruimte in het verblijf.");
+
+            foreach (var animal in enclosure.Animals)
+            {
+                if (enclosure.SecurityLevel < animal.SecurityRequirement)
+                    issues.Add($"{animal.Name} vereist een hoger beveiligingsniveau dan beschikbaar is.");
+            }
+
+            return Ok(issues.Count == 0 ? new List<string> { "Alle eisen zijn voldaan." } : issues);
         }
     }
 }
