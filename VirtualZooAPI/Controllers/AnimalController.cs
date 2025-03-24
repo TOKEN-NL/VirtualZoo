@@ -1,21 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VirtualZooAPI.Services.Interfaces;
 using VirtualZooShared.Models;
+using VirtualZooShared.Enums;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using VirtualZooAPI.Services.Implementations;
 
 namespace VirtualZooAPI.Controllers
 {
+
     [Route("api/animals")]
     [ApiController]
     public class AnimalController : ControllerBase
     {
         private readonly IAnimalService _animalService;
+        private readonly IEnclosureService _enclosureService;
 
-        public AnimalController(IAnimalService animalService)
+        public AnimalController(IAnimalService animalService, IEnclosureService enclosureService)
         {
             _animalService = animalService;
+            _enclosureService = enclosureService;
         }
 
         /// <summary>
@@ -99,5 +105,108 @@ namespace VirtualZooAPI.Controllers
             await _animalService.DeleteAnimalAsync(id);
             return NoContent();
         }
+
+        /// <summary>
+        /// Geeft aan of het dier wakker is tijdens zonsopgang.
+        /// </summary>
+        [HttpGet("{id}/sunrise")]
+        [SwaggerOperation(Summary = "Geeft aan of het dier wakker wordt bij zonsopgang.")]
+        [SwaggerResponse(200, "Statusbericht over het dier tijdens zonsopgang.", typeof(string))]
+        [SwaggerResponse(404, "Dier niet gevonden.")]
+        public async Task<ActionResult<string>> Sunrise(int id)
+        {
+            var animal = await _animalService.GetAnimalByIdAsync(id);
+            if (animal == null) return NotFound();
+
+            return Ok(animal.ActivityPattern switch
+            {
+                ActivityPattern.Diurnal => $"{animal.Name} wordt wakker.",
+                ActivityPattern.Nocturnal => $"{animal.Name} gaat slapen.",
+                ActivityPattern.Cathemeral => $"{animal.Name} is actief.",
+                _ => $"Activiteitspatroon van {animal.Name} is onbekend."
+            });
+        }
+
+        /// <summary>
+        /// Geeft aan of het dier wakker is tijdens zonsondergang.
+        /// </summary>
+        [HttpGet("{id}/sunset")]
+        [SwaggerOperation(Summary = "Geeft aan of het dier wakker wordt bij zonsondergang.")]
+        [SwaggerResponse(200, "Statusbericht over het dier tijdens zonsondergang.", typeof(string))]
+        [SwaggerResponse(404, "Dier niet gevonden.")]
+        public async Task<ActionResult<string>> Sunset(int id)
+        {
+            var animal = await _animalService.GetAnimalByIdAsync(id);
+            if (animal == null) return NotFound();
+
+            return Ok(animal.ActivityPattern switch
+            {
+                ActivityPattern.Diurnal => $"{animal.Name} gaat slapen.",
+                ActivityPattern.Nocturnal => $"{animal.Name} wordt wakker.",
+                ActivityPattern.Cathemeral => $"{animal.Name} is actief.",
+                _ => $"Activiteitspatroon van {animal.Name} is onbekend."
+            });
+        }
+
+        /// <summary>
+        /// Geeft aan wat het dier eet.
+        /// </summary>
+        [HttpGet("{id}/feedingtime")]
+        [SwaggerOperation(Summary = "Geeft aan wat het dier eet.")]
+        [SwaggerResponse(200, "Beschrijving van het dieet van het dier.", typeof(string))]
+        [SwaggerResponse(404, "Dier niet gevonden.")]
+        public async Task<ActionResult<string>> FeedingTime(int id)
+        {
+            var animal = await _animalService.GetAnimalByIdAsync(id);
+            if (animal == null) return NotFound();
+
+            var eatsOtherAnimals = animal.DietaryClass == DietaryClass.Carnivore ||
+                                   animal.DietaryClass == DietaryClass.Piscivore;
+
+            return Ok(eatsOtherAnimals
+                ? $"{animal.Name} eet andere dieren."
+                : $"{animal.Name} eet {animal.Prey}.");
+        }
+
+        /// <summary>
+        /// Controleert of het verblijf van het dier groot genoeg en veilig genoeg is.
+        /// </summary>
+        [HttpGet("{id}/checkconstraints")]
+        [SwaggerOperation(Summary = "Controleert of het dier in een geschikt verblijf zit.")]
+        [SwaggerResponse(200, "Lijst met constraint-issues of bevestiging dat alles in orde is.", typeof(List<string>))]
+        [SwaggerResponse(404, "Dier niet gevonden.")]
+        public async Task<ActionResult<List<string>>> CheckConstraints(int id)
+        {
+            var animal = await _animalService.GetAnimalByIdAsync(id);
+            if (animal == null) return NotFound();
+
+            var issues = new List<string>();
+
+            if (animal.EnclosureId == null)
+            {
+                issues.Add($"{animal.Name} is aan geen verblijf gekoppeld.");
+            }
+            else
+            {
+                // Haal de enclosure op via de EnclosureService
+                var enclosure = await _enclosureService.GetEnclosureByIdAsync(animal.EnclosureId);
+                if (enclosure == null)
+                {
+                    issues.Add($"Verblijf met ID {animal.EnclosureId} niet gevonden.");
+                }
+                else
+                {
+                    double totalRequired = enclosure.Animals.Sum(a => a.SpaceRequirement);
+                    if (totalRequired > enclosure.Size)
+                        issues.Add("Te weinig ruimte in het verblijf.");
+
+                    if (enclosure.SecurityLevel < animal.SecurityRequirement)
+                        issues.Add("Beveiligingsniveau van verblijf is onvoldoende.");
+                }
+            }
+
+            return Ok(issues.Count == 0 ? new List<string> { "Alle eisen zijn voldaan." } : issues);
+        }
+
     }
 }

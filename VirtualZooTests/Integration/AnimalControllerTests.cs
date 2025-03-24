@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System;
+using VirtualZooShared.Enums;
 
 namespace VirtualZooTests.Integration
 {
@@ -94,6 +97,141 @@ namespace VirtualZooTests.Integration
 
             var response = await _client.DeleteAsync($"/api/animals/{createdAnimal.Id}");
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test of de sunrise actie het juiste bericht geeft op basis van het activiteitspatroon.
+        /// </summary>
+        [Fact]
+        public async Task Sunrise_ShouldReturnCorrectMessage()
+        {
+            var newAnimal = AnimalFactory.CreateAnimal();
+            var response = await _client.PostAsJsonAsync("/api/animals", newAnimal);
+            response.EnsureSuccessStatusCode();
+
+            var rawResponse = await response.Content.ReadAsStringAsync();
+            var createdAnimal = JsonSerializer.Deserialize<Animal>(rawResponse, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            var sunriseResponse = await _client.GetAsync($"/api/animals/{createdAnimal.Id}/sunrise");
+            sunriseResponse.EnsureSuccessStatusCode();
+            var message = await sunriseResponse.Content.ReadAsStringAsync();
+
+            Assert.Contains(createdAnimal.Name, message);
+        }
+
+        /// <summary>
+        /// Test of de sunset actie het juiste bericht geeft op basis van het activiteitspatroon.
+        /// </summary>
+        [Fact]
+        public async Task Sunset_ShouldReturnCorrectMessage()
+        {
+            var newAnimal = AnimalFactory.CreateAnimal();
+            var response = await _client.PostAsJsonAsync("/api/animals", newAnimal);
+            response.EnsureSuccessStatusCode();
+
+            var rawResponse = await response.Content.ReadAsStringAsync();
+            var createdAnimal = JsonSerializer.Deserialize<Animal>(rawResponse, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            var sunsetResponse = await _client.GetAsync($"/api/animals/{createdAnimal.Id}/sunset");
+            sunsetResponse.EnsureSuccessStatusCode();
+            var message = await sunsetResponse.Content.ReadAsStringAsync();
+
+            Assert.Contains(createdAnimal.Name, message);
+        }
+
+        /// <summary>
+        /// Test of de feeding time actie het juiste bericht geeft over wat het dier eet.
+        /// </summary>
+        [Fact]
+        public async Task FeedingTime_ShouldReturnCorrectMessage()
+        {
+            var newAnimal = AnimalFactory.CreateAnimal();
+            var response = await _client.PostAsJsonAsync("/api/animals", newAnimal);
+            response.EnsureSuccessStatusCode();
+
+            var rawResponse = await response.Content.ReadAsStringAsync();
+            var createdAnimal = JsonSerializer.Deserialize<Animal>(rawResponse, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            var feedingResponse = await _client.GetAsync($"/api/animals/{createdAnimal.Id}/feedingtime");
+            feedingResponse.EnsureSuccessStatusCode();
+            var message = await feedingResponse.Content.ReadAsStringAsync();
+
+            Assert.Contains(createdAnimal.Name, message);
+        }
+
+        /// <summary>
+        /// Test of checkconstraints feedback geeft over verblijf en veiligheid.
+        /// </summary>
+        [Fact]
+        public async Task CheckConstraints_ShouldReturnCorrectFeedbackForBothCases()
+        {
+            // Animal dat voldoet aan constraints (klein verblijf + laag beveiligingsniveau)
+            var validAnimal = AnimalFactory.CreateAnimal();
+            validAnimal.SpaceRequirement = 1; // Klein verblijf
+            validAnimal.SecurityRequirement = SecurityLevel.Low; // Laag beveiligingsniveau
+            var validCreateResponse = await _client.PostAsJsonAsync("/api/animals", validAnimal);
+            validCreateResponse.EnsureSuccessStatusCode();
+
+            var validJson = await validCreateResponse.Content.ReadAsStringAsync();
+            var validAnimalObj = JsonSerializer.Deserialize<Animal>(validJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            var validCheckResponse = await _client.GetAsync($"/api/animals/{validAnimalObj.Id}/checkconstraints");
+            validCheckResponse.EnsureSuccessStatusCode();
+
+            var validRaw = await validCheckResponse.Content.ReadAsStringAsync();
+            List<string> validResult;
+            try
+            {
+                validResult = JsonSerializer.Deserialize<List<string>>(validRaw);
+            }
+            catch
+            {
+                var jsonElement = JsonSerializer.Deserialize<JsonElement>(validRaw);
+                var valuesElement = jsonElement.GetProperty("$values");
+                validResult = JsonSerializer.Deserialize<List<string>>(valuesElement.GetRawText());
+            }
+
+            Assert.Single(validResult);
+            Assert.Contains("Alle eisen zijn voldaan.", validResult);
+
+            // Animal dat niet voldoet aan constraints (te veel ruimte nodig + hoog beveiligingsniveau)
+            var invalidAnimal = AnimalFactory.CreateAnimal();
+            invalidAnimal.SpaceRequirement = 9999; // Te veel ruimte nodig
+            invalidAnimal.SecurityRequirement = SecurityLevel.High; // Hoog beveiligingsniveau
+            invalidAnimal.EnclosureId = 1; // Verblijf met ID 1 (security level te laag)
+            var invalidCreateResponse = await _client.PostAsJsonAsync("/api/animals", invalidAnimal);
+            invalidCreateResponse.EnsureSuccessStatusCode();
+
+            var invalidJson = await invalidCreateResponse.Content.ReadAsStringAsync();
+            var invalidAnimalObj = JsonSerializer.Deserialize<Animal>(invalidJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            var invalidCheckResponse = await _client.GetAsync($"/api/animals/{invalidAnimalObj.Id}/checkconstraints");
+            invalidCheckResponse.EnsureSuccessStatusCode();
+
+            var invalidRaw = await invalidCheckResponse.Content.ReadAsStringAsync();
+            List<string> invalidResult;
+            try
+            {
+                invalidResult = JsonSerializer.Deserialize<List<string>>(invalidRaw);
+            }
+            catch
+            {
+                var jsonElement = JsonSerializer.Deserialize<JsonElement>(invalidRaw);
+                var valuesElement = jsonElement.GetProperty("$values");
+                invalidResult = JsonSerializer.Deserialize<List<string>>(valuesElement.GetRawText());
+            }
+
+            Assert.Contains("Te weinig ruimte in het verblijf.", invalidResult);
+            Assert.Contains("Beveiligingsniveau van verblijf is onvoldoende.", invalidResult);
         }
     }
 }
