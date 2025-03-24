@@ -178,6 +178,7 @@ namespace VirtualZooTests.Integration
             var validAnimal = AnimalFactory.CreateAnimal();
             validAnimal.SpaceRequirement = 1; // Klein verblijf
             validAnimal.SecurityRequirement = SecurityLevel.Low; // Laag beveiligingsniveau
+            validAnimal.EnclosureId = 19; // Verblijf met ID 19 (genoeg ruimte)
             var validCreateResponse = await _client.PostAsJsonAsync("/api/animals", validAnimal);
             validCreateResponse.EnsureSuccessStatusCode();
 
