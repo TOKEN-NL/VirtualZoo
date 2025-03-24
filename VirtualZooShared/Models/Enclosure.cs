@@ -11,8 +11,6 @@ namespace VirtualZooShared.Models
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Animal> Animals { get; set; }
-
         public Climate Climate { get; set; }
 
         public HabitatType HabitatType { get; set; }
@@ -20,5 +18,9 @@ namespace VirtualZooShared.Models
         public SecurityLevel SecurityLevel { get; set; }
 
         public double Size { get; set; } // in square meters
+
+
+        public ICollection<Animal>? Animals { get; set; } = new List<Animal>();
+
     }
 }
