@@ -15,11 +15,17 @@ using System.Text.Json.Serialization;
 
 namespace VirtualZooTests.Integration
 {
-    public class CategoryControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    /// <summary>
+    /// Integration tests voor de EnclosureController API endpoints.
+    /// </summary>
+    public class EnclosureControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
 
-        public CategoryControllerTests(WebApplicationFactory<Program> factory)
+        /// <summary>
+        /// Initialisatie van de testclient met aangepaste content root.
+        /// </summary>
+        public EnclosureControllerTests(WebApplicationFactory<Program> factory)
         {
             _client = factory.WithWebHostBuilder(builder =>
             {
@@ -29,31 +35,31 @@ namespace VirtualZooTests.Integration
         }
 
         /// <summary>
-        /// Test of ophalen van categorieën een succesvolle response (200 OK) retourneert.
+        /// Test of ophalen van verblijven een succesvolle response (200 OK) retourneert.
         /// </summary>
         [Fact]
-        public async Task GetCategories_ShouldReturnOkResponse()
+        public async Task GetEnclosures_ShouldReturnOkResponse()
         {
-            var response = await _client.GetAsync("/api/categories");
+            var response = await _client.GetAsync("/api/enclosures");
             response.EnsureSuccessStatusCode();
 
             var rawResponse = await response.Content.ReadAsStringAsync();
             var jsonObject = JsonSerializer.Deserialize<JsonElement>(rawResponse);
 
-            var categories = JsonSerializer.Deserialize<List<Category>>(jsonObject.GetProperty("$values").GetRawText());
+            var enclosures = JsonSerializer.Deserialize<List<Enclosure>>(jsonObject.GetProperty("$values").GetRawText());
 
-            Assert.NotNull(categories);
-            Assert.NotEmpty(categories);
+            Assert.NotNull(enclosures);
+            Assert.NotEmpty(enclosures);
         }
 
         /// <summary>
-        /// Test of het aanmaken van een categorie correct werkt en een 201 Created response geeft.
+        /// Test of het aanmaken van een verblijf correct werkt en een 201 Created response geeft.
         /// </summary>
         [Fact]
-        public async Task PostCategory_ShouldReturnCreatedResponse()
+        public async Task PostEnclosure_ShouldReturnCreatedResponse()
         {
-            var newCategory = CategoryFactory.CreateCategory();
-            var response = await _client.PostAsJsonAsync("/api/categories", newCategory);
+            var newEnclosure = EnclosureFactory.CreateEnclosure();
+            var response = await _client.PostAsJsonAsync("/api/enclosures", newEnclosure);
             var rawResponse = await response.Content.ReadAsStringAsync();
 
             response.EnsureSuccessStatusCode();
@@ -62,27 +68,25 @@ namespace VirtualZooTests.Integration
             var jsonOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
-                ReferenceHandler = ReferenceHandler.Preserve 
+                ReferenceHandler = ReferenceHandler.Preserve
             };
 
             var jsonObject = JsonSerializer.Deserialize<JsonElement>(rawResponse, jsonOptions);
-            var createdCategory = JsonSerializer.Deserialize<Category>(jsonObject.GetRawText(), jsonOptions);
+            var createdEnclosure = JsonSerializer.Deserialize<Enclosure>(jsonObject.GetRawText(), jsonOptions);
 
-            Assert.NotNull(createdCategory);
-            Assert.Equal(newCategory.Name, createdCategory.Name);
-            Assert.NotNull(createdCategory.Animals); 
-            Assert.Empty(createdCategory.Animals); 
+            Assert.NotNull(createdEnclosure);
+            Assert.Equal(newEnclosure.Name, createdEnclosure.Name);
+            Assert.NotNull(createdEnclosure.Animals);
         }
 
-
         /// <summary>
-        /// Test of een categorie correct verwijderd kan worden.
+        /// Test of een verblijf correct verwijderd kan worden.
         /// </summary>
         [Fact]
-        public async Task DeleteCategory_ShouldReturnNoContentResponse()
+        public async Task DeleteEnclosure_ShouldReturnNoContentResponse()
         {
-            var newCategory = CategoryFactory.CreateCategory();
-            var createResponse = await _client.PostAsJsonAsync("/api/categories", newCategory);
+            var newEnclosure = EnclosureFactory.CreateEnclosure();
+            var createResponse = await _client.PostAsJsonAsync("/api/enclosures", newEnclosure);
             createResponse.EnsureSuccessStatusCode();
 
             var rawResponse = await createResponse.Content.ReadAsStringAsync();
@@ -94,14 +98,13 @@ namespace VirtualZooTests.Integration
             };
 
             var jsonObject = JsonSerializer.Deserialize<JsonElement>(rawResponse, jsonOptions);
-            var createdCategory = JsonSerializer.Deserialize<Category>(jsonObject.GetRawText(), jsonOptions);
+            var createdEnclosure = JsonSerializer.Deserialize<Enclosure>(jsonObject.GetRawText(), jsonOptions);
 
-            Assert.NotNull(createdCategory);
-            Assert.True(createdCategory.Id > 0, "Created category must have a valid Id");
+            Assert.NotNull(createdEnclosure);
+            Assert.True(createdEnclosure.Id > 0, "Created enclosure must have a valid Id");
 
-            var response = await _client.DeleteAsync($"/api/categories/{createdCategory.Id}");
+            var response = await _client.DeleteAsync($"/api/enclosures/{createdEnclosure.Id}");
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
         }
-
     }
 }

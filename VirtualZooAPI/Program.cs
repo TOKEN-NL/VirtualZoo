@@ -15,6 +15,10 @@ builder.Services.AddScoped<IAnimalService, AnimalService>();
 // Category
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+// Enclosure
+builder.Services.AddScoped<IEnclosureRepository, EnclosureRepository>();
+builder.Services.AddScoped<IEnclosureService, EnclosureService>();
+
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

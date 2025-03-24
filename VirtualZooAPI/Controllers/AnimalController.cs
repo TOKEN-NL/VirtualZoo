@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VirtualZooAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/animals")]
     [ApiController]
     public class AnimalController : ControllerBase
     {

@@ -10,6 +10,6 @@ namespace VirtualZooShared.Models
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Enclosure> Enclosures { get; set; } = new List<Enclosure>();
+        public ICollection<Enclosure>? Enclosures { get; set; } = new List<Enclosure>();
     }
 }
