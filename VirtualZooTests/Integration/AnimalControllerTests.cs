@@ -39,7 +39,7 @@ namespace VirtualZooTests.Integration
         [Fact]
         public async Task GetAnimals_ShouldReturnOkResponse()
         {
-            var response = await _client.GetAsync("/api/animal");
+            var response = await _client.GetAsync("/api/animals");
             response.EnsureSuccessStatusCode();
 
             var rawResponse = await response.Content.ReadAsStringAsync();
@@ -58,7 +58,7 @@ namespace VirtualZooTests.Integration
         public async Task PostAnimal_ShouldReturnCreatedResponse()
         {
             var newAnimal = AnimalFactory.CreateAnimal();
-            var response = await _client.PostAsJsonAsync("/api/Animal", newAnimal);
+            var response = await _client.PostAsJsonAsync("/api/animals", newAnimal);
             var rawResponse = await response.Content.ReadAsStringAsync();
 
             response.EnsureSuccessStatusCode();
@@ -80,7 +80,7 @@ namespace VirtualZooTests.Integration
         public async Task DeleteAnimal_ShouldReturnNoContentResponse()
         {
             var newAnimal = AnimalFactory.CreateAnimal();
-            var createResponse = await _client.PostAsJsonAsync("/api/Animal", newAnimal);
+            var createResponse = await _client.PostAsJsonAsync("/api/animals", newAnimal);
             createResponse.EnsureSuccessStatusCode();
 
             var rawResponse = await createResponse.Content.ReadAsStringAsync();
@@ -92,7 +92,7 @@ namespace VirtualZooTests.Integration
             Assert.NotNull(createdAnimal);
             Assert.True(createdAnimal.Id > 0, "Created animal must have a valid Id");
 
-            var response = await _client.DeleteAsync($"/api/Animal/{createdAnimal.Id}");
+            var response = await _client.DeleteAsync($"/api/animals/{createdAnimal.Id}");
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
         }
     }
