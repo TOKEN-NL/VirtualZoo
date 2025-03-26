@@ -1,10 +1,10 @@
 ﻿using Bogus;
 using VirtualZooShared.Enums;
 using VirtualZooShared.Models;
-using VirtualZooShared.Data;
+using VirtualZooAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace VirtualZooShared.Factories
+namespace VirtualZooAPI.Factories
 {
     public static class AnimalFactory
     {
@@ -25,7 +25,7 @@ namespace VirtualZooShared.Factories
                 .RuleFor(a => a.Size, f => f.PickRandom<Size>())
                 .RuleFor(a => a.DietaryClass, f => f.PickRandom<DietaryClass>())
                 .RuleFor(a => a.ActivityPattern, f => f.PickRandom<ActivityPattern>())
-                .RuleFor(a => a.SpaceRequirement, f => f.Random.Double(5, 50))
+                .RuleFor(a => a.SpaceRequirement, f => Math.Round(f.Random.Double(5, 50), 2))
                 .RuleFor(a => a.SecurityRequirement, f => f.PickRandom<SecurityLevel>())
                 .RuleFor(a => a.Prey, f => f.Lorem.Word())
                 .RuleFor(a => a.CategoryId, f => f.PickRandom(categoryIds))

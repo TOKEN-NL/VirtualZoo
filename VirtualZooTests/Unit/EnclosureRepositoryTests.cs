@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using VirtualZooShared.Data;
+using VirtualZooAPI.Data;
 using VirtualZooAPI.Repositories.Implementations;
 using VirtualZooShared.Models;
 using VirtualZooShared.Factories;
