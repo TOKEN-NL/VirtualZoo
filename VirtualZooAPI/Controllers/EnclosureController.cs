@@ -137,21 +137,27 @@ namespace VirtualZooAPI.Controllers
         /// Geeft aan wat alle dieren in dit verblijf eten.
         /// </summary>
         [HttpGet("{id}/feedingtime")]
-        [SwaggerOperation(Summary = "Geeft aan wat alle dieren in dit verblijf eten.")]
-        [SwaggerResponse(200, "Lijst met wat elk dier eet.", typeof(List<string>))]
+        [SwaggerOperation(Summary = "Geeft aan wat elk dier in dit verblijf eet.")]
+        [SwaggerResponse(200, "Lijst met voedselsituaties per dier in het verblijf.", typeof(List<string>))]
         [SwaggerResponse(404, "Verblijf niet gevonden.")]
         public async Task<ActionResult<List<string>>> FeedingTime(int id)
         {
             var enclosure = await _enclosureService.GetEnclosureByIdAsync(id);
             if (enclosure == null) return NotFound();
 
-            var result = enclosure.Animals.Select(a => $"{a.Name}: " +
-                (a.DietaryClass == DietaryClass.Carnivore || a.DietaryClass == DietaryClass.Piscivore
-                    ? "eet andere dieren."
-                    : $"eet {a.Prey}.")).ToList();
+            var responses = enclosure.Animals.Select(animal =>
+            {
+                if (animal.DietaryClass == DietaryClass.Carnivore || animal.DietaryClass == DietaryClass.Piscivore)
+                {
+                    return $"{animal.Name} eet andere dieren ({animal.Prey}).";
+                }
 
-            return Ok(result);
+                return $"{animal.Name} eet {animal.Prey}.";
+            }).ToList();
+
+            return Ok(responses);
         }
+
 
         /// <summary>
         /// Controleert of het verblijf voldoet aan de ruimte- en beveiligingseisen.
