@@ -1,0 +1,41 @@
+﻿@model VirtualZooShared.Models.Enclosure
+
+@{
+    var animals = ViewBag.Animals as List<VirtualZooShared.Models.Animal> ?? new();
+    var assignedAnimals = animals.Where(a => a.EnclosureId == Model.Id).ToList();
+}
+
+<h2>Verblijf Details</h2>
+
+<div>
+    <p><strong>Naam:</strong> @Model.Name</p>
+    <p><strong>Grootte:</strong> @Model.Size</p>
+    <p><strong>Beveiligingsniveau:</strong> @Model.SecurityLevel</p>
+    <p><strong>Klimaat:</strong> @Model.Climate</p>
+    <p><strong>Habitat Type:</strong> @Model.HabitatType</p>
+</div>
+
+@if (assignedAnimals.Any())
+{
+    <h4>Dieren in dit verblijf:</h4>
+    <ul>
+        @foreach (var animal in assignedAnimals)
+        {
+            <li>@animal.Name (@animal.Species)</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>Geen dieren gekoppeld aan dit verblijf.</em></p>
+}
+
+<!-- Eventuele acties -->
+<div>
+    <form method="post" action="/Enclosure/Sunrise"><button type="submit">Sunrise</button></form>
+    <form method="post" action="/Enclosure/Sunset"><button type="submit">Sunset</button></form>
+    <form method="post" action="/Enclosure/FeedingTime"><button type="submit">Feeding Time</button></form>
+    <form method="post" action="/Enclosure/CheckConstraints"><button type="submit">Check Constraints</button></form>
+</div>
+
+<a href="@Url.Action("Index","Enclosure")">Terug naar Verblijvenlijst</a>
