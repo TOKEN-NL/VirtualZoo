@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using VirtualZooShared.Models;
-using VirtualZooShared.Factories;
+using VirtualZooAPI.Factories;
 using Xunit;
 using VirtualZooAPI;
 using Microsoft.AspNetCore.TestHost;

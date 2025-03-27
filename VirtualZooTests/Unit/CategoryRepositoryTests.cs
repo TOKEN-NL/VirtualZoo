@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using VirtualZooAPI.Data;
 using VirtualZooAPI.Repositories.Implementations;
 using VirtualZooShared.Models;
-using VirtualZooShared.Factories;
+using VirtualZooAPI.Factories;
 using Xunit;
 
 namespace VirtualZooTests.Unit
@@ -25,7 +25,8 @@ namespace VirtualZooTests.Unit
                 .Options;
 
             var databaseContext = new ApplicationDbContext(options);
-            await databaseContext.Database.EnsureCreatedAsync();
+            await databaseContext.Database.EnsureDeletedAsync();
+            await databaseContext.Database.MigrateAsync();
             SeedData.Initialize(databaseContext);
 
             if (!await databaseContext.Categories.AnyAsync())
