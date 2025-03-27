@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using VirtualZooAPI;
 using Xunit;
 using System.IO;
+using System.Net.Http.Json;
+using VirtualZooAPI.Factories;
+using VirtualZooShared.Enums;
+using VirtualZooShared.Models;
 
 namespace VirtualZooTests.Integration
 {
@@ -123,6 +127,89 @@ namespace VirtualZooTests.Integration
 
             Assert.NotNull(feedback);
             Assert.NotEmpty(feedback);
+        }
+
+        /// <summary>
+        /// Integration tests voor de AutoAssign actie in de ZooController.
+        /// </summary>
+        public class ZooControllerAutoAssignTests : IClassFixture<WebApplicationFactory<Program>>
+        {
+            private readonly HttpClient _client;
+
+            public ZooControllerAutoAssignTests(WebApplicationFactory<Program> factory)
+            {
+                _client = factory.WithWebHostBuilder(builder =>
+                {
+                    var apiPath = Path.GetFullPath("../../../../VirtualZooAPI");
+                    builder.UseContentRoot(apiPath);
+                }).CreateClient();
+            }
+
+            /// <summary>
+            /// Test of dieren zonder verblijf automatisch gekoppeld worden aan een nieuw verblijf.
+            /// </summary>
+            [Fact]
+            public async Task AutoAssign_ShouldAssignAnimalsWithoutEnclosure()
+            {
+                var animal = AnimalFactory.CreateAnimal();
+                animal.EnclosureId = null;
+
+                var createResponse = await _client.PostAsJsonAsync("/api/animals", animal);
+                createResponse.EnsureSuccessStatusCode();
+
+                var assignResponse = await _client.PostAsync("/api/zoo/autoassign?resetExisting=false", null);
+                assignResponse.EnsureSuccessStatusCode();
+
+                var raw = await assignResponse.Content.ReadAsStringAsync();
+                var feedback = JsonSerializer.Deserialize<List<string>>(raw, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                });
+
+                Assert.NotNull(feedback);
+                Assert.Contains(feedback, msg => msg.Contains("gekoppeld"));
+            }
+
+            /// <summary>
+            /// Test of alle verblijven en koppelingen worden verwijderd bij reset=true.
+            /// </summary>
+            [Fact]
+            public async Task AutoAssign_WithReset_ShouldClearAndReassignAll()
+            {
+                var assignResponse = await _client.PostAsync("/api/zoo/autoassign?resetExisting=true", null);
+                assignResponse.EnsureSuccessStatusCode();
+
+                var raw = await assignResponse.Content.ReadAsStringAsync();
+                var feedback = JsonSerializer.Deserialize<List<string>>(raw, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                });
+
+                Assert.NotNull(feedback);
+                Assert.Contains(feedback, msg => msg.Contains("verblijven zijn verwijderd") || msg.Contains("gekoppeld"));
+            }
+
+            /// <summary>
+            /// Test dat de actie een geldige lijst met strings teruggeeft zonder fouten.
+            /// </summary>
+            [Fact]
+            public async Task AutoAssign_ShouldReturnValidFeedbackList()
+            {
+                var response = await _client.PostAsync("/api/zoo/autoassign?resetExisting=false", null);
+                response.EnsureSuccessStatusCode();
+
+                var raw = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<List<string>>(raw, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                });
+
+                Assert.NotNull(result);
+                Assert.All(result, msg => Assert.False(string.IsNullOrWhiteSpace(msg)));
+            }
         }
     }
 }
