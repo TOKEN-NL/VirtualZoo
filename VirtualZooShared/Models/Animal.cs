@@ -25,7 +25,7 @@ namespace VirtualZooShared.Models
 
         public string Prey { get; set; }
 
-        public int EnclosureId { get; set; }
+        public int? EnclosureId { get; set; }
 
         public double SpaceRequirement { get; set; } //square meters/Animal
 
