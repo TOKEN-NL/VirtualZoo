@@ -24,11 +24,13 @@ namespace VirtualZooAPI.Repositories.Implementations
             return await _context.Enclosures.Include(e => e.Animals).FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task AddEnclosureAsync(Enclosure enclosure)
+        public async Task<Enclosure> AddEnclosureAsync(Enclosure enclosure)
         {
             _context.Enclosures.Add(enclosure);
             await _context.SaveChangesAsync();
+            return enclosure;
         }
+
 
         public async Task UpdateEnclosureAsync(Enclosure enclosure)
         {

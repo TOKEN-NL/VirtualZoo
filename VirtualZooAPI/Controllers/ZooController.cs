@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using VirtualZooAPI.Services.Implementations;
 using VirtualZooAPI.Services.Interfaces;
 using VirtualZooShared.Enums;
 
@@ -12,11 +13,13 @@ namespace VirtualZooAPI.Controllers
     {
         private readonly IAnimalService _animalService;
         private readonly IEnclosureService _enclosureService;
+        private readonly IZooService _zooService;
 
-        public ZooController(IAnimalService animalService, IEnclosureService enclosureService)
+        public ZooController(IAnimalService animalService, IEnclosureService enclosureService, IZooService zooService)
         {
             _animalService = animalService;
             _enclosureService = enclosureService;
+            _zooService = zooService;
         }
 
         /// <summary>
@@ -128,5 +131,18 @@ namespace VirtualZooAPI.Controllers
                 : feedback);
         }
 
+        /// <summary>
+        /// Wijs dieren automatisch toe aan verblijven, met optie om bestaande indeling te resetten.
+        /// </summary>
+        /// <param name="resetExisting">Als true: verwijder alle verblijven en maak nieuwe. Als false: vul bestaande verblijven aan en verplaats waar nodig.</param>
+        /// <returns>Lijst met feedback per dier.</returns>
+        [HttpPost("autoassign")]
+        [SwaggerOperation(Summary = "Wijs dieren automatisch toe aan verblijven.")]
+        [SwaggerResponse(200, "Lijst met toewijzingsfeedback per dier.", typeof(List<string>))]
+        public async Task<ActionResult<List<string>>> AutoAssign([FromQuery] bool resetExisting = false)
+        {
+            var result = await _zooService.AutoAssignAsync(resetExisting);
+            return Ok(result);
+        }
     }
 }

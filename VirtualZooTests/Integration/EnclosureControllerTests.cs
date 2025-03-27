@@ -22,6 +22,7 @@ namespace VirtualZooTests.Integration
     public class EnclosureControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
+        private readonly List<Enclosure> _existingEnclosures = new();
 
         /// <summary>
         /// Initialisatie van de testclient met aangepaste content root.
@@ -33,6 +34,31 @@ namespace VirtualZooTests.Integration
                 var apiPath = Path.GetFullPath("../../../../VirtualZooAPI");
                 builder.UseContentRoot(apiPath);
             }).CreateClient();
+
+            Task.Run(async () => await LoadExistingEnclosuresAsync()).Wait();
+        }
+
+        /// <summary>
+        /// Opslaan van bestaande enclosures in een lijst voor later gebruik.
+        /// </summary>
+        private async Task LoadExistingEnclosuresAsync()
+        {
+            var response = await _client.GetAsync("/api/enclosures");
+            response.EnsureSuccessStatusCode();
+
+            var raw = await response.Content.ReadAsStringAsync();
+            var jsonObject = JsonSerializer.Deserialize<JsonElement>(raw);
+
+            var enclosures = JsonSerializer.Deserialize<List<Enclosure>>(
+                jsonObject.GetProperty("$values").GetRawText(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                });
+
+            if (enclosures != null)
+                _existingEnclosures.AddRange(enclosures);
         }
 
         /// <summary>
@@ -114,7 +140,7 @@ namespace VirtualZooTests.Integration
         [Fact]
         public async Task Sunrise_ShouldReturnAnimalActivityMessages()
         {
-            var response = await _client.GetAsync("/api/enclosures/1/sunrise");
+            var response = await _client.GetAsync($"/api/enclosures/{_existingEnclosures[0].Id}/sunrise");
             response.EnsureSuccessStatusCode();
 
             var raw = await response.Content.ReadAsStringAsync();
@@ -141,7 +167,7 @@ namespace VirtualZooTests.Integration
         [Fact]
         public async Task Sunset_ShouldReturnAnimalActivityMessages()
         {
-            var response = await _client.GetAsync("/api/enclosures/1/sunset");
+            var response = await _client.GetAsync($"/api/enclosures/{_existingEnclosures[0].Id}/sunset");
             response.EnsureSuccessStatusCode();
 
             var raw = await response.Content.ReadAsStringAsync();
@@ -168,7 +194,7 @@ namespace VirtualZooTests.Integration
         [Fact]
         public async Task FeedingTime_ShouldReturnFeedingInfo()
         {
-            var response = await _client.GetAsync("/api/enclosures/1/feedingtime");
+            var response = await _client.GetAsync($"/api/enclosures/{_existingEnclosures[0].Id}/feedingtime");
             response.EnsureSuccessStatusCode();
 
             var raw = await response.Content.ReadAsStringAsync();
@@ -191,7 +217,7 @@ namespace VirtualZooTests.Integration
         [Fact]
         public async Task CheckConstraints_ShouldReturnConstraintFeedback()
         {
-            var response = await _client.GetAsync("/api/enclosures/1/checkconstraints");
+            var response = await _client.GetAsync($"/api/enclosures/{_existingEnclosures[0].Id}/checkconstraints");
             response.EnsureSuccessStatusCode();
 
             var raw = await response.Content.ReadAsStringAsync();

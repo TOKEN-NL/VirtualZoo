@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System;
 using VirtualZooShared.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace VirtualZooTests.Integration
 {
@@ -174,11 +175,30 @@ namespace VirtualZooTests.Integration
         [Fact]
         public async Task CheckConstraints_ShouldReturnCorrectFeedbackForBothCases()
         {
-            // Animal dat voldoet aan constraints (klein verblijf + laag beveiligingsniveau)
+            // Nieuw verblijf aanmaken
+            var enclosure = EnclosureFactory.CreateEnclosure();
+            enclosure.Size = 100; // Genoeg ruimte voor valid animal, te weinig voor invalid
+            enclosure.SecurityLevel = SecurityLevel.Low; // Voldoende voor valid, onvoldoende voor invalid
+
+            var enclosureResponse = await _client.PostAsJsonAsync("/api/enclosures", enclosure);
+            enclosureResponse.EnsureSuccessStatusCode();
+
+            var rawEnclosure = await enclosureResponse.Content.ReadAsStringAsync();
+            var jsonObject = JsonSerializer.Deserialize<JsonElement>(rawEnclosure);
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+            var createdEnclosure = JsonSerializer.Deserialize<Enclosure>(jsonObject.GetRawText(), jsonOptions);
+            Assert.NotNull(createdEnclosure);
+
+            // Animal die voldoet aan het verblijf
             var validAnimal = AnimalFactory.CreateAnimal();
-            validAnimal.SpaceRequirement = 1; // Klein verblijf
-            validAnimal.SecurityRequirement = SecurityLevel.Low; // Laag beveiligingsniveau
-            validAnimal.EnclosureId = 19; // Verblijf met ID 19 (genoeg ruimte)
+            validAnimal.SpaceRequirement = 1;
+            validAnimal.SecurityRequirement = SecurityLevel.Low;
+            validAnimal.EnclosureId = createdEnclosure.Id;
+
             var validCreateResponse = await _client.PostAsJsonAsync("/api/animals", validAnimal);
             validCreateResponse.EnsureSuccessStatusCode();
 
@@ -204,11 +224,12 @@ namespace VirtualZooTests.Integration
             Assert.Single(validResult);
             Assert.Contains("Alle eisen zijn voldaan.", validResult);
 
-            // Animal dat niet voldoet aan constraints (te veel ruimte nodig + hoog beveiligingsniveau)
+            // Animal die niet voldoet aan het verblijf
             var invalidAnimal = AnimalFactory.CreateAnimal();
-            invalidAnimal.SpaceRequirement = 9999; // Te veel ruimte nodig
-            invalidAnimal.SecurityRequirement = SecurityLevel.High; // Hoog beveiligingsniveau
-            invalidAnimal.EnclosureId = 1; // Verblijf met ID 1 (security level te laag)
+            invalidAnimal.SpaceRequirement = 9999;
+            invalidAnimal.SecurityRequirement = SecurityLevel.High;
+            invalidAnimal.EnclosureId = createdEnclosure.Id;
+
             var invalidCreateResponse = await _client.PostAsJsonAsync("/api/animals", invalidAnimal);
             invalidCreateResponse.EnsureSuccessStatusCode();
 
@@ -234,5 +255,6 @@ namespace VirtualZooTests.Integration
             Assert.Contains("Te weinig ruimte in het verblijf.", invalidResult);
             Assert.Contains("Beveiligingsniveau van verblijf is onvoldoende.", invalidResult);
         }
+
     }
 }

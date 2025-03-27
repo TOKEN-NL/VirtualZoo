@@ -1,4 +1,5 @@
-﻿using VirtualZooAPI.Repositories.Interfaces;
+﻿using VirtualZooAPI.Repositories.Implementations;
+using VirtualZooAPI.Repositories.Interfaces;
 using VirtualZooAPI.Services.Interfaces;
 using VirtualZooShared.Models;
 
@@ -19,8 +20,10 @@ namespace VirtualZooAPI.Services.Implementations
         public async Task<Enclosure?> GetEnclosureByIdAsync(int id) =>
             await _repository.GetEnclosureByIdAsync(id);
 
-        public async Task AddEnclosureAsync(Enclosure enclosure) =>
-            await _repository.AddEnclosureAsync(enclosure);
+        public async Task<Enclosure> AddEnclosureAsync(Enclosure enclosure)
+        {
+            return await _repository.AddEnclosureAsync(enclosure);
+        }
 
         public async Task UpdateEnclosureAsync(Enclosure enclosure) =>
             await _repository.UpdateEnclosureAsync(enclosure);

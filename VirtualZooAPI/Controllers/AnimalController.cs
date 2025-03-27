@@ -190,7 +190,7 @@ namespace VirtualZooAPI.Controllers
             else
             {
                 // Haal de enclosure op via de EnclosureService
-                var enclosure = await _enclosureService.GetEnclosureByIdAsync(animal.EnclosureId);
+                var enclosure = await _enclosureService.GetEnclosureByIdAsync(animal.EnclosureId.Value);
                 if (enclosure == null)
                 {
                     issues.Add($"Verblijf met ID {animal.EnclosureId} niet gevonden.");
