@@ -18,6 +18,8 @@ namespace VirtualZooShared.Models
         public SecurityLevel SecurityLevel { get; set; }
 
         public double Size { get; set; } // in square meters
+        
+        public int ZooId { get; set; }
 
 
         public ICollection<Animal>? Animals { get; set; } = new List<Animal>();

@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using VirtualZooShared.Models;
 
-namespace VirtualZooShared.Factories
+namespace VirtualZooAPI.Factories
 {
     public static class CategoryFactory
     {

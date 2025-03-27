@@ -160,13 +160,14 @@ namespace VirtualZooAPI.Controllers
             var animal = await _animalService.GetAnimalByIdAsync(id);
             if (animal == null) return NotFound();
 
-            var eatsOtherAnimals = animal.DietaryClass == DietaryClass.Carnivore ||
-                                   animal.DietaryClass == DietaryClass.Piscivore;
+            if (animal.DietaryClass == DietaryClass.Carnivore || animal.DietaryClass == DietaryClass.Piscivore)
+            {
+                return Ok($"{animal.Name} eet andere dieren ({animal.Prey}).");
+            }
 
-            return Ok(eatsOtherAnimals
-                ? $"{animal.Name} eet andere dieren."
-                : $"{animal.Name} eet {animal.Prey}.");
+            return Ok($"{animal.Name} eet {animal.Prey}.");
         }
+
 
         /// <summary>
         /// Controleert of het verblijf van het dier groot genoeg en veilig genoeg is.

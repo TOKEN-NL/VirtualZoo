@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using VirtualZooShared.Data;
+using VirtualZooAPI.Data;
 using VirtualZooShared.Models;
 using VirtualZooShared.Enums;
 using Xunit;
