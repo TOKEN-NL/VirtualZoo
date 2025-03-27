@@ -1,0 +1,29 @@
+﻿@model VirtualZooShared.Models.Category
+
+@{
+    var animals = ViewBag.Animals as List<VirtualZooShared.Models.Animal> ?? new();
+    var assignedAnimals = animals.Where(a => a.CategoryId == Model.Id).ToList();
+}
+
+<h2>Categorie Details</h2>
+
+<div>
+    <p><strong>Naam:</strong> @Model.Name</p>
+</div>
+
+@if (assignedAnimals.Any())
+{
+    <h4>Dieren in deze categorie:</h4>
+    <ul>
+        @foreach (var animal in assignedAnimals)
+        {
+            <li>@animal.Name (@animal.Species)</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>Geen dieren gekoppeld aan deze categorie.</em></p>
+}
+
+<a href="@Url.Action("Index", "Category")">Terug naar Categorieënlijst</a>
