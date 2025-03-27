@@ -42,10 +42,14 @@ namespace VirtualZoo.Controllers
             return View(model);
         }
 
-        public async Task<List<string>> Request(string query)
+        public new async Task<List<string>> Request(string query, bool usePost = false)
         {
-            //var response = await _zooService.AutoAssignAsync(resetExisting);
-            var response = await _httpClient.PostAsync($"{query}", null);
+            HttpResponseMessage response;
+            if (usePost)
+                response = await _httpClient.PostAsync($"{query}", null);
+            else
+                response = await _httpClient.GetAsync(query);
+
             response.EnsureSuccessStatusCode();
             var raw = await response.Content.ReadAsStringAsync();
             var feedback = JsonSerializer.Deserialize<List<string>>(raw, new JsonSerializerOptions
@@ -57,31 +61,31 @@ namespace VirtualZoo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Sunrise()
+        public async Task<IActionResult> SunriseResult()
         {
-            await _httpClient.PostAsync("/api/zoo/sunrise", null);
-            return RedirectToAction(nameof(Index));
+            var feedback = await Request("/api/zoo/sunrise");
+            return View("Result", feedback);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Sunset()
+        public async Task<IActionResult> SunsetResult()
         {
-            await _httpClient.PostAsync("/api/zoo/sunset", null);
-            return RedirectToAction(nameof(Index));
+            var feedback = await Request("/api/zoo/sunset");
+            return View("Result", feedback);
         }
 
         [HttpPost]
-        public async Task<IActionResult> FeedingTime()
+        public async Task<IActionResult> FeedingTimeResult()
         {
-            await _httpClient.PostAsync("/api/zoo/feedingtime", null);
-            return RedirectToAction(nameof(Index));
+            var feedback = await Request("/api/zoo/feedingtime");
+            return View("Result", feedback);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckConstraints()
+        public async Task<IActionResult> CheckConstraintsResult()
         {
-            await _httpClient.PostAsync("/api/zoo/checkconstraints", null);
-            return RedirectToAction(nameof(Index));
+            var feedback = await Request("/api/zoo/checkconstraints");
+            return View("Result", feedback);
         }
 
         // AutoAssign Confirm Page
@@ -94,9 +98,7 @@ namespace VirtualZoo.Controllers
         [HttpPost]
         public async Task<IActionResult> AutoAssignResponse(bool resetExisting)
         {
-
-            var feedback = await Request("api/zoo/autoassign?resetExisting=" + resetExisting.ToString().ToLower());
-            
+            var feedback = await Request("api/zoo/autoassign?resetExisting=" + resetExisting.ToString().ToLower(), usePost: true);
             return View("AutoAssignResult", feedback);
         }
     }
