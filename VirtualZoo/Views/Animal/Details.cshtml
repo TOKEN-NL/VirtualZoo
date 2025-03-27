@@ -23,10 +23,10 @@
 
 <!-- Eventuele acties -->
 <div>
-    <form method="post" action="/Animal/Sunrise"><button type="submit">Sunrise</button></form>
-    <form method="post" action="/Animal/Sunset"><button type="submit">Sunset</button></form>
-    <form method="post" action="/Animal/FeedingTime"><button type="submit">Feeding Time</button></form>
-    <form method="post" action="/Animal/CheckConstraints"><button type="submit">Check Constraints</button></form>
+    <form method="post" action="/Animal/SunriseResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Sunrise</button></form>
+    <form method="post" action="/Animal/SunsetResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Sunset</button></form>
+    <form method="post" action="/Animal/FeedingTimeResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Feeding Time</button></form>
+    <form method="post" action="/Animal/CheckConstraintsResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Check Constraints</button></form>
 </div>
 
 <a href="@Url.Action("Index", "Animal")">Back to Animal List</a>
