@@ -1,0 +1,32 @@
+﻿@model VirtualZooShared.Models.Animal
+@{
+    var categories = ViewBag.Categories as List<VirtualZooShared.Models.Category> ?? new();
+    var enclosures = ViewBag.Enclosures as List<VirtualZooShared.Models.Enclosure> ?? new();
+    var catName = categories.FirstOrDefault(c => c.Id == Model.CategoryId)?.Name ?? "No Category";
+    var encName = enclosures.FirstOrDefault(e => e.Id == Model.EnclosureId)?.Name ?? "No Enclosure";
+}
+
+<h2>Dier Details</h2>
+
+<div>
+    <p><strong>Naam:</strong> @Model.Name</p>
+    <p><strong>Soort:</strong> @Model.Species</p>
+    <p><strong>Categorie:</strong> @catName</p>
+    <p><strong>Verblijf:</strong> @encName</p>
+    <p><strong>Grootte (Size):</strong> @Model.Size</p>
+    <p><strong>Dieet (DietaryClass):</strong> @Model.DietaryClass</p>
+    <p><strong>Activiteit (ActivityPattern):</strong> @Model.ActivityPattern</p>
+    <p><strong>Prooi:</strong> @Model.Prey</p>
+    <p><strong>Ruimte (SpaceRequirement):</strong> @Model.SpaceRequirement</p>
+    <p><strong>Beveiliging (SecurityRequirement):</strong> @Model.SecurityRequirement</p>
+</div>
+
+<!-- Eventuele acties -->
+<div>
+    <form method="post" action="/Animal/Sunrise"><button type="submit">Sunrise</button></form>
+    <form method="post" action="/Animal/Sunset"><button type="submit">Sunset</button></form>
+    <form method="post" action="/Animal/FeedingTime"><button type="submit">Feeding Time</button></form>
+    <form method="post" action="/Animal/CheckConstraints"><button type="submit">Check Constraints</button></form>
+</div>
+
+<a href="@Url.Action("Index","Animal")">Terug naar Dierenlijst</a>
