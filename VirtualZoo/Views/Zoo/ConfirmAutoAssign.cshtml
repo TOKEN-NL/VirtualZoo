@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Confirm AutoAssign";
+}
+
+<h2>Confirm AutoAssign</h2>
+
+<form method="post" asp-controller="Zoo" asp-action="AutoAssignResponse">
+    <p>Confirm your intensions regarding autoassign:</p>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="resetExisting" name="resetExisting" />
+        <label class="form-check-label" for="resetExisting">
+            Discard all existing enclosures, auto-create new ones.
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Confirm</button>
+    <a href="@Url.Action("Index", "Zoo")" class="btn btn-secondary mt-3">Cancel</a>
+</form>
