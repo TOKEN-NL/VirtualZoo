@@ -5,19 +5,19 @@
     var assignedAnimals = animals.Where(a => a.EnclosureId == Model.Id).ToList();
 }
 
-<h2>Verblijf Details</h2>
+<h2>Enclosure Details</h2>
 
 <div>
-    <p><strong>Naam:</strong> @Model.Name</p>
-    <p><strong>Grootte:</strong> @Model.Size</p>
-    <p><strong>Beveiligingsniveau:</strong> @Model.SecurityLevel</p>
-    <p><strong>Klimaat:</strong> @Model.Climate</p>
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>Size:</strong> @Model.Size</p>
+    <p><strong>Security Level:</strong> @Model.SecurityLevel</p>
+    <p><strong>Climate:</strong> @Model.Climate</p>
     <p><strong>Habitat Type:</strong> @Model.HabitatType</p>
 </div>
 
 @if (assignedAnimals.Any())
 {
-    <h4>Dieren in dit verblijf:</h4>
+    <h4>Animals in this enclosure:</h4>
     <ul>
         @foreach (var animal in assignedAnimals)
         {
@@ -27,7 +27,7 @@
 }
 else
 {
-    <p><em>Geen dieren gekoppeld aan dit verblijf.</em></p>
+    <p><em>No animals assigned to this enclosure.</em></p>
 }
 
 <!-- Eventuele acties -->
@@ -38,4 +38,4 @@ else
     <form method="post" action="/Enclosure/CheckConstraints"><button type="submit">Check Constraints</button></form>
 </div>
 
-<a href="@Url.Action("Index","Enclosure")">Terug naar Verblijvenlijst</a>
+<a href="@Url.Action("Index", "Enclosure")">Back to Enclosure List</a>

@@ -5,15 +5,15 @@
     var assignedAnimals = animals.Where(a => a.CategoryId == Model.Id).ToList();
 }
 
-<h2>Categorie Details</h2>
+<h2>Category Details</h2>
 
 <div>
-    <p><strong>Naam:</strong> @Model.Name</p>
+    <p><strong>Name:</strong> @Model.Name</p>
 </div>
 
 @if (assignedAnimals.Any())
 {
-    <h4>Dieren in deze categorie:</h4>
+    <h4>Animals in this category:</h4>
     <ul>
         @foreach (var animal in assignedAnimals)
         {
@@ -23,7 +23,7 @@
 }
 else
 {
-    <p><em>Geen dieren gekoppeld aan deze categorie.</em></p>
+    <p><em>No animals assigned to this category.</em></p>
 }
 
-<a href="@Url.Action("Index", "Category")">Terug naar Categorieënlijst</a>
+<a href="@Url.Action("Index", "Category")">Back to Category List</a>
