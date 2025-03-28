@@ -50,11 +50,10 @@ Het project is opgesplitst in duidelijke lagen:
 
 ### 3. **Wireframes**
 
-maak wireframes
 
-#*komt nog*#
+![Wireframe van Zoo Dashboard](Docs/Wireframes/WireframesLayout.png)
 
-![Wireframe van Zoo Dashboard](docs/wireframes/zoo_dashboard.png)
+[Bekijk de wireframes in detail](Docs/Handleiding.pdf)
 
 ---
 
@@ -65,7 +64,7 @@ maak wireframes
 ---
 
 ### 5. **API Documentatie**
-
+Bij Het bouwen van de API heb ik gebruik gemaakt van Swagger. Ik heb geprobeerd zo veel mogelijk Swagger documentatie toe te voegen aan de API. Hieronder vind je een overzicht van de endpoints die beschikbaar zijn in de API. De Swagger documentatie is te vinden door de API op te starten in Visual Studio.
 
 ### Animal
 
@@ -164,9 +163,13 @@ maak wireframes
 
 ### 6. **Reflectie**
 - Wat ging goed tijdens het project?
+    - Uiteindelijk is het gelukt om vrijwel alle functionaliteiten te implementeren. De API en frontend werken goed samen en de applicatie is goed gestructureerd.
 - Wat waren lastige punten?
+-   - Tijd. De weekopdrachten en de eindopdracht waren erg groot. Doordat ik de opdracht alleen uitvoerde was het lastig om alles op tijd af te krijgen. 
 - Wat heb je geleerd?
+    - Ik heb vooral geleerd dat ik interacties met de data goed gescheiden kan houden van de frontend. Dit maakt het makkelijker om de frontend te veranderen zonder dat de backend aangepast hoeft te worden. Ook heb ik geleerd hoe ik een API kan gebruiken om het scheiden makkelijker te maken.
 - Wat zou je verbeteren als je meer tijd had?
+    - Ik zou de frontend beter verfijnen en aantrekkelijker maken. Daarnaast zou ik functies gebruiksvriendelijker maken.
 
 ---
 
