@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using VirtualZooAPI.Services.Interfaces;
 using VirtualZooShared.Models;
+using System.Net.Http;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace VirtualZooWebApp.Controllers
 {
@@ -10,11 +13,13 @@ namespace VirtualZooWebApp.Controllers
     {
         private readonly IEnclosureService _enclosureService;
         private readonly IAnimalService _animalService;
+        private readonly HttpClient _httpClient = new HttpClient();
 
-        public EnclosureController(IEnclosureService enclosureService, IAnimalService animalService)
+        public EnclosureController(IEnclosureService enclosureService, IAnimalService animalService, IHttpClientFactory httpClientFactory)
         {
             _enclosureService = enclosureService;
             _animalService = animalService;
+            _httpClient = httpClientFactory.CreateClient("ApiClient"); 
         }
 
         // Vul ViewBag met benodigde lijsten
@@ -23,7 +28,20 @@ namespace VirtualZooWebApp.Controllers
             var animals = await _animalService.GetAllAnimalsAsync();
             ViewBag.Animals = animals;
         }
-
+        public new async Task<List<string>> Request(string query)
+        {
+            HttpResponseMessage response;
+            response = await _httpClient.GetAsync(query);
+            
+            response.EnsureSuccessStatusCode();
+            var raw = await response.Content.ReadAsStringAsync();
+            var feedback = JsonSerializer.Deserialize<List<string>>(raw, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return feedback;
+        }
         // Lijst van alle Enclosures
         public async Task<IActionResult> Index(string searchTerm = "")
         {
@@ -151,6 +169,34 @@ namespace VirtualZooWebApp.Controllers
             // Verwijder de enclosure
             await _enclosureService.DeleteEnclosureAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SunriseResult(int id)
+        {
+            var feedback = await Request("/api/enclosures/"+id+"/sunrise");
+            return View("Result", feedback);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SunsetResult(int id)
+        {
+            var feedback = await Request("/api/enclosures/"+id+"/sunset");
+            return View("Result", feedback);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FeedingTimeResult(int id)
+        {
+            var feedback = await Request("/api/enclosures/"+id+"/feedingtime");
+            return View("Result", feedback);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckConstraintsResult(int id)
+        {
+            var feedback = await Request("/api/enclosures/"+id+"/checkconstraints");
+            return View("Result", feedback);
         }
 
     }

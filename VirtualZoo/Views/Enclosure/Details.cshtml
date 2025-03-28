@@ -30,12 +30,12 @@ else
     <p><em>No animals assigned to this enclosure.</em></p>
 }
 
-<!-- Eventuele acties -->
+<!-- Knop acties -->
 <div>
-    <form method="post" action="/Enclosure/Sunrise"><button type="submit">Sunrise</button></form>
-    <form method="post" action="/Enclosure/Sunset"><button type="submit">Sunset</button></form>
-    <form method="post" action="/Enclosure/FeedingTime"><button type="submit">Feeding Time</button></form>
-    <form method="post" action="/Enclosure/CheckConstraints"><button type="submit">Check Constraints</button></form>
+    <form method="post" action="/Enclosure/SunriseResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Sunrise</button></form>
+    <form method="post" action="/Enclosure/SunsetResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Sunset</button></form>
+    <form method="post" action="/Enclosure/FeedingTimeResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Feeding Time</button></form>
+    <form method="post" action="/Enclosure/CheckConstraintsResult"><input type="hidden" name="id" value="@Model.Id" /><button type="submit">Check Constraints</button></form>
 </div>
 
 <a href="@Url.Action("Index", "Enclosure")">Back to Enclosure List</a>
