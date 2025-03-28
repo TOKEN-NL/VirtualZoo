@@ -28,6 +28,8 @@ namespace VirtualZooWebApp.Controllers
             var animals = await _animalService.GetAllAnimalsAsync();
             ViewBag.Animals = animals;
         }
+
+        // HttpClient voor het aanroepen van de API
         public new async Task<List<string>> Request(string query)
         {
             HttpResponseMessage response;
@@ -42,6 +44,7 @@ namespace VirtualZooWebApp.Controllers
             });
             return feedback;
         }
+
         // Lijst van alle Enclosures
         public async Task<IActionResult> Index(string searchTerm = "")
         {

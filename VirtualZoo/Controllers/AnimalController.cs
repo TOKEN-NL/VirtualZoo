@@ -3,6 +3,9 @@ using VirtualZooAPI.Services.Interfaces;
 using VirtualZooShared.Models;
 using System.Threading.Tasks;
 using VirtualZooAPI.Services.Implementations;
+using System.Net.Http;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace VirtualZooWebApp.Controllers
 {
@@ -11,12 +14,26 @@ namespace VirtualZooWebApp.Controllers
         private readonly IAnimalService _animalService;
         private readonly ICategoryService _categoryService;
         private readonly IEnclosureService _enclosureService;
+        private readonly HttpClient _httpClient;
 
-        public AnimalController(IAnimalService animalService, ICategoryService categoryService, IEnclosureService enclosureService)
+        public AnimalController(IAnimalService animalService, ICategoryService categoryService, IEnclosureService enclosureService, IHttpClientFactory httpClientFactory)
         {
             _animalService = animalService;
             _categoryService = categoryService;
             _enclosureService = enclosureService;
+            _httpClient = httpClientFactory.CreateClient("ApiClient");
+        }
+
+        // HttpClient voor het aanroepen van de API
+        public new async Task<string> Request(string query)
+        {
+            HttpResponseMessage response;
+            response = await _httpClient.GetAsync(query);
+
+            response.EnsureSuccessStatusCode();
+            var feedback = await response.Content.ReadAsStringAsync();
+            
+            return feedback;
         }
 
         // Vul ViewBag met benodigde lijsten
@@ -121,5 +138,39 @@ namespace VirtualZooWebApp.Controllers
             await _animalService.DeleteAnimalAsync(id);
             return RedirectToAction(nameof(Index));  
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SunriseResult(int id)
+        {
+            var feedback = await Request("/api/animals/" + id + "/sunrise");
+            return View("Result", new List<string> { feedback });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SunsetResult(int id)
+        {
+            var feedback = await Request("/api/animals/" + id + "/sunset");
+            return View("Result", new List<string> { feedback });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FeedingTimeResult(int id)
+        {
+            var feedback = await Request("/api/animals/" + id + "/feedingtime");
+            return View("Result", new List<string> { feedback });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckConstraintsResult(int id)
+        {
+            var raw = await Request("/api/animals/" + id + "/checkconstraints");
+            var feedback = JsonSerializer.Deserialize<List<string>>(raw, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return View("Result", feedback);
+        }
+
     }
 }
