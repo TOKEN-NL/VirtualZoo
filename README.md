@@ -53,7 +53,7 @@ Het project is opgesplitst in duidelijke lagen:
 
 ![Wireframe van Zoo Dashboard](Docs/Wireframes/WireframesLayout.png)
 
-[Bekijk de wireframes in detail](Docs/Handleiding.pdf)
+[Bekijk de wireframes in detail](Docs/VirtualZooWireframes.pdf)
 
 ---
 
