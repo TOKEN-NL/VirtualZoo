@@ -184,6 +184,6 @@ Bij Het bouwen van de API heb ik gebruik gemaakt van Swagger. Ik heb geprobeerd 
 4. Open het project en update database `dotnet ef database update --project VirtualZooAPI` 
 5. Voer voor de zekerheid het volgende commando uit om de HTTPS certificaten te vertrouwen: `dotnet dev-certs https --trust`
 6. Start de app via Visual Studio (Keuze uit de API `VirtualZooAPI` of de frontend `VirtualZoo`)`) of via de termial met `dotnet run --project VirtualZooAPI` of `dotnet run --project VirtualZoo`.
-7. de webapplicatie is nu beschikbaar op `https://localhost:7134` en de API op `https://localhost:5001/api/`.
+7. de webapplicatie is nu beschikbaar op `https://localhost:7134` en de API op `https://localhost:7016/swagger`.
 
 
