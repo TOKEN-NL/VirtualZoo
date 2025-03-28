@@ -60,32 +60,105 @@ maak wireframes
 ### 4. **Entity-Relationship Diagram (ERD)**
 
 ![ERD van de VirtualZoo](Docs/ERD.svg)
+(klik op de afbeelding voor een duidelijker beeld van de relaties)
 
 ---
 
 ### 5. **API Documentatie**
 
-Beschrijf de belangrijkste API-endpoints:
 
-Bijvoorbeeld:
+### Animal
 
+##### [GET] /api/animals  
+* Haal alle dieren op
 
-#### GET /api/animal
-Retourneert een lijst van alle dieren
+##### [POST] /api/animals  
+* Voeg een nieuw dier toe
 
-#### POST /api/enclosure
-Voegt een nieuw verblijf toe  
-Body:
-```json
-{
-  "name": "Savannah",
-  "size": 100,
-  "securityLevel": "High"
-}
-POST /api/zoo/autoassign?resetExisting=true
-Genereert automatisch verblijven voor dieren
+##### [GET] /api/animals/{id}  
+* Haal een dier op
 
-```
+##### [PUT] /api/animals/{id}  
+* Update een dier
+
+##### [DELETE] /api/animals/{id}  
+* Verwijder een dier
+
+##### [GET] /api/animals/{id}/sunrise  
+* Geeft aan of het dier wakker wordt bij zonsopgang.
+
+##### [GET] /api/animals/{id}/sunset  
+* Geeft aan of het dier wakker wordt bij zonsondergang.
+
+##### [GET] /api/animals/{id}/feedingtime  
+* Geeft aan wat het dier eet.
+
+##### [GET] /api/animals/{id}/checkconstraints  
+* Controleert of het dier in een geschikt verblijf zit.
+
+### Category
+
+##### [GET] /api/categories  
+* Haal alle categorieën op
+
+##### [POST] /api/categories  
+* Voeg een nieuwe categorie toe
+
+##### [GET] /api/categories/{id}  
+* Haal een categorie op
+
+##### [PUT] /api/categories/{id}  
+* Update een categorie
+
+##### [DELETE] /api/categories/{id}  
+* Verwijder een categorie
+
+### Enclosure
+
+##### [GET] /api/enclosures  
+* Haal alle verblijven op
+
+##### [POST] /api/enclosures  
+* Voeg een nieuw verblijf toe
+
+##### [GET] /api/enclosures/{id}  
+* Haal een verblijf op
+
+##### [PUT] /api/enclosures/{id}  
+* Update een verblijf
+
+##### [DELETE] /api/enclosures/{id}  
+* Delete een verblijf
+
+##### [GET] /api/enclosures/{id}/sunrise  
+* Geeft aan welke dieren wakker worden of gaan slapen bij zonsopgang.
+
+##### [GET] /api/enclosures/{id}/sunset  
+* Geeft aan welke dieren wakker worden of gaan slapen bij zonsondergang.
+
+##### [GET] /api/enclosures/{id}/feedingtime  
+* Geeft aan wat elk dier in dit verblijf eet.
+
+##### [GET] /api/enclosures/{id}/checkconstraints  
+* Controleert of het verblijf voldoet aan ruimte- en beveiligingseisen.
+
+### Zoo
+
+##### [GET] /api/zoo/sunrise  
+* Toont het gedrag van alle dieren bij zonsopgang.
+
+##### [GET] /api/zoo/sunset  
+* Toont het gedrag van alle dieren bij zonsondergang.
+
+##### [GET] /api/zoo/feedingtime  
+* Toont het dieet van alle dieren.
+
+##### [GET] /api/zoo/checkconstraints  
+* Controleert of alle verblijven voldoen aan de eisen van hun dieren.
+
+##### [POST] /api/zoo/autoassign  
+* Wijs dieren automatisch toe aan verblijven.
+
 
 ---
 
@@ -98,14 +171,11 @@ Genereert automatisch verblijven voor dieren
 ---
 
 ### 7. **Installatie-instructies**
-Als je project lokaal opstartbaar moet zijn:
-```md
-### Installatie
+
 1. Clone deze repo
 2. Zorg voor .NET 8 SDK
-3. Voer `dotnet ef database update` uit
-4. Start de app via `dotnet run`
+3. Update database `dotnet ef database update --project VirtualZooAPI` 
+4. Start de app via Visual Studio
 
-```
 
 
