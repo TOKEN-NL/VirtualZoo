@@ -26,7 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add HttpClient for API calls
 builder.Services.AddHttpClient("ApiClient", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7134/");
+    client.BaseAddress = new Uri("https://localhost:7016/");
 });
 
 var app = builder.Build();
