@@ -78,7 +78,7 @@ namespace VirtualZooWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            await FillViewBag(); 
+            await FillViewBag();
             return View(enclosure);
         }
 

@@ -1,0 +1,14 @@
+﻿@model VirtualZooShared.Models.Category
+
+<h2>Delete Category</h2>
+
+<p>Are you sure you want to delete this category?</p>
+<div>
+    <strong>Name:</strong> @Model.Name
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("Index", "Category")" class="btn btn-secondary">Cancel</a>
+</form>

@@ -6,19 +6,19 @@
     var encName = enclosures.FirstOrDefault(e => e.Id == Model.EnclosureId)?.Name ?? "No Enclosure";
 }
 
-<h2>Dier Details</h2>
+<h2>Animal Details</h2>
 
 <div>
-    <p><strong>Naam:</strong> @Model.Name</p>
-    <p><strong>Soort:</strong> @Model.Species</p>
-    <p><strong>Categorie:</strong> @catName</p>
-    <p><strong>Verblijf:</strong> @encName</p>
-    <p><strong>Grootte (Size):</strong> @Model.Size</p>
-    <p><strong>Dieet (DietaryClass):</strong> @Model.DietaryClass</p>
-    <p><strong>Activiteit (ActivityPattern):</strong> @Model.ActivityPattern</p>
-    <p><strong>Prooi:</strong> @Model.Prey</p>
-    <p><strong>Ruimte (SpaceRequirement):</strong> @Model.SpaceRequirement</p>
-    <p><strong>Beveiliging (SecurityRequirement):</strong> @Model.SecurityRequirement</p>
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>Species:</strong> @Model.Species</p>
+    <p><strong>Category:</strong> @catName</p>
+    <p><strong>Enclosure:</strong> @encName</p>
+    <p><strong>Size:</strong> @Model.Size</p>
+    <p><strong>Dietary Class:</strong> @Model.DietaryClass</p>
+    <p><strong>Activity Pattern:</strong> @Model.ActivityPattern</p>
+    <p><strong>Prey:</strong> @Model.Prey</p>
+    <p><strong>Space Requirement:</strong> @Model.SpaceRequirement</p>
+    <p><strong>Security Level:</strong> @Model.SecurityRequirement</p>
 </div>
 
 <!-- Eventuele acties -->
@@ -29,4 +29,4 @@
     <form method="post" action="/Animal/CheckConstraints"><button type="submit">Check Constraints</button></form>
 </div>
 
-<a href="@Url.Action("Index","Animal")">Terug naar Dierenlijst</a>
+<a href="@Url.Action("Index", "Animal")">Back to Animal List</a>
