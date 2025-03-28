@@ -105,6 +105,12 @@ namespace VirtualZooAPI.Services.Implementations
                 await _animalService.UpdateAnimalAsync(animal);
             }
 
+            // Als alle animals een verblijf hebben dat voldoet aan de eisen, is er geen herverdeling nodig
+            if (!feedback.Any())
+            {
+                feedback.Add("Alle dieren zitten al in een geschikt verblijf. Er was geen herverdeling nodig.");
+            }
+
             return feedback;
         }
 
