@@ -1,11 +1,28 @@
 using Microsoft.EntityFrameworkCore;
+using VirtualZooAPI.Data;
+using VirtualZooAPI.Repositories.Implementations;
+using VirtualZooAPI.Repositories.Interfaces;
+using VirtualZooAPI.Services.Implementations;
+using VirtualZooAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-
+// Animal
+builder.Services.AddScoped<IAnimalRepository, AnimalRepository>();
+builder.Services.AddScoped<IAnimalService, AnimalService>();
+// Category
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+// Enclosure
+builder.Services.AddScoped<IEnclosureRepository, EnclosureRepository>();
+builder.Services.AddScoped<IEnclosureService, EnclosureService>();
+// Zoo
+builder.Services.AddScoped<IZooService, ZooService>();
+// Add DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

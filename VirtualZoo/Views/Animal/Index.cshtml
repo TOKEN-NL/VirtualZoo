@@ -1,0 +1,47 @@
+﻿@model List<VirtualZooShared.Models.Animal>
+@{
+    var categories = ViewBag.Categories as List<VirtualZooShared.Models.Category> ?? new();
+    var enclosures = ViewBag.Enclosures as List<VirtualZooShared.Models.Enclosure> ?? new();
+}
+<h2>Animals List</h2>
+
+<div style="display: flex; align-items: center; gap: 10px;">
+    <form method="get" action="/Animal/Index">
+        <input type="text" name="searchTerm" placeholder="Zoek op naam" />
+        <button type="submit">Zoeken</button>
+    </form>
+    <!-- Knop voor toevoegen van nieuw dier -->
+    <a href="@Url.Action("Create", "Animal")" class="btn btn-primary">Create New Animal</a>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Category</th>
+            <th>Enclosure</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var animal in Model)
+        {
+            var catName = categories.FirstOrDefault(c => c.Id == animal.CategoryId)?.Name ?? "No Category";
+            var encName = enclosures.FirstOrDefault(e => e.Id == animal.EnclosureId)?.Name ?? "No Enclosure";
+
+            <tr onclick ="window.location='@Url.Action("Details", "Animal", new { id = animal.Id })';" style="cursor: pointer;">
+                <td>@animal.Name</td>
+                <td>@animal.Species</td>
+                <td>@catName</td>
+                <td>@encName</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Animal", new { id = animal.Id })">Edit</a>
+                    <a href="@Url.Action("Delete", "Animal", new { id = animal.Id })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

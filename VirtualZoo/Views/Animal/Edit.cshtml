@@ -1,0 +1,143 @@
+﻿@model VirtualZooShared.Models.Animal
+
+<h2>Edit Animal</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <!-- Naam -->
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+    </div>
+
+    <!-- Soort -->
+    <div class="form-group">
+        <label for="Species">Species</label>
+        <input type="text" class="form-control" id="Species" name="Species" value="@Model.Species" />
+    </div>
+
+    <!-- Categorie -->
+    <div class="form-group">
+        <label for="CategoryId">Category</label>
+        <select class="form-control" id="CategoryId" name="CategoryId">
+            @foreach (var category in ViewBag.Categories as List<VirtualZooShared.Models.Category>)
+            {
+                if (category.Id == Model.CategoryId)
+                {
+                    <option value="@category.Id" selected="selected">@category.Name</option>
+                }
+                else
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- Enclosure -->
+    <div class="form-group">
+        <label for="EnclosureId">Enclosure</label>
+        <select class="form-control" id="EnclosureId" name="EnclosureId">
+            @foreach (var enclosure in ViewBag.Enclosures as List<VirtualZooShared.Models.Enclosure>)
+            {
+                if (enclosure.Id == Model.EnclosureId)
+                {
+                    <option value="@enclosure.Id" selected="selected">@enclosure.Name</option>
+                }
+                else
+                {
+                    <option value="@enclosure.Id">@enclosure.Name</option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- Size (bijv. enum) -->
+    <div class="form-group">
+        <label for="Size">Size</label>
+        <select class="form-control" id="Size" name="Size">
+            @foreach (var sizeValue in Enum.GetValues(typeof(VirtualZooShared.Enums.Size)))
+            {
+                if ((VirtualZooShared.Enums.Size)sizeValue == Model.Size)
+                {
+                    <option value="@sizeValue" selected="selected">@sizeValue</option>
+                }
+                else
+                {
+                    <option value="@sizeValue">@sizeValue</option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- DietaryClass (enum) -->
+    <div class="form-group">
+        <label for="DietaryClass">Dietary Class</label>
+        <select class="form-control" id="DietaryClass" name="DietaryClass">
+            @foreach (var dietValue in Enum.GetValues(typeof(VirtualZooShared.Enums.DietaryClass)))
+            {
+                if ((VirtualZooShared.Enums.DietaryClass)dietValue == Model.DietaryClass)
+                {
+                    <option value="@dietValue" selected="selected">@dietValue</option>
+                }
+                else
+                {
+                    <option value="@dietValue">@dietValue</option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- ActivityPattern (enum) -->
+    <div class="form-group">
+        <label for="ActivityPattern">Activity Pattern</label>
+        <select class="form-control" id="ActivityPattern" name="ActivityPattern">
+            @foreach (var actValue in Enum.GetValues(typeof(VirtualZooShared.Enums.ActivityPattern)))
+            {
+                if ((VirtualZooShared.Enums.ActivityPattern)actValue == Model.ActivityPattern)
+                {
+                    <option value="@actValue" selected="selected">@actValue</option>
+                }
+                else
+                {
+                    <option value="@actValue">@actValue</option>
+                }
+            }
+        </select>
+    </div>
+
+    <!-- Prey -->
+    <div class="form-group">
+        <label for="Prey">Prey</label>
+        <input type="text" class="form-control" id="Prey" name="Prey" value="@Model.Prey" />
+    </div>
+
+    <!-- SpaceRequirement -->
+    <div class="form-group">
+        <label for="SpaceRequirement">Space Requirement</label>
+        <input type="number" step="0.1" class="form-control" id="SpaceRequirement" name="SpaceRequirement"
+               value="@Model.SpaceRequirement" />
+    </div>
+
+    <!-- SecurityRequirement (enum) -->
+    <div class="form-group">
+        <label for="SecurityRequirement">Security Level</label>
+        <select class="form-control" id="SecurityRequirement" name="SecurityRequirement">
+            @foreach (var secValue in Enum.GetValues(typeof(VirtualZooShared.Enums.SecurityLevel)))
+            {
+                if ((VirtualZooShared.Enums.SecurityLevel)secValue == Model.SecurityRequirement)
+                {
+                    <option value="@secValue" selected="selected">@secValue</option>
+                }
+                else
+                {
+                    <option value="@secValue">@secValue</option>
+                }
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
