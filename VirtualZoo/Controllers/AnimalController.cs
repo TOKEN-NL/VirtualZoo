@@ -19,7 +19,7 @@ namespace VirtualZooWebApp.Controllers
             _enclosureService = enclosureService;
         }
 
-        // Actie om de viewbag te vullen
+        // Vul ViewBag met benodigde lijsten
         private async Task FillViewBag()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();

@@ -1,0 +1,40 @@
+﻿@model List<VirtualZooShared.Models.Enclosure>
+
+<h2>Enclosures List</h2>
+
+<div style="display: flex; align-items: center; gap: 10px;">
+    <form method="get" action="/Enclosure/Index">
+        <input type="text" name="searchTerm" placeholder="Zoek op naam" />
+        <button type="submit">Zoeken</button>
+    </form>
+    <a href="@Url.Action("Create", "Enclosure")" class="btn btn-primary">Create New Enclosure</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Security Level</th>
+            <th>Climate</th>
+            <th>Habitat Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var enclosure in Model)
+        {
+            <tr onclick="window.location='@Url.Action("Details", "Enclosure", new { id = enclosure.Id })';" style="cursor: pointer;">
+                <td>@enclosure.Name</td>
+                <td>@enclosure.Size</td>
+                <td>@enclosure.SecurityLevel</td>
+                <td>@enclosure.Climate</td>
+                <td>@enclosure.HabitatType</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Enclosure", new { id = enclosure.Id })">Edit</a>
+                    <a href="@Url.Action("Delete", "Enclosure", new { id = enclosure.Id })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

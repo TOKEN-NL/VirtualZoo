@@ -1,0 +1,82 @@
+﻿@model VirtualZooShared.Models.Enclosure
+@{
+    var animals = ViewBag.Animals as List<VirtualZooShared.Models.Animal> ?? new();
+    var assignedAnimalIds = Model.Animals?.Select(a => a.Id).ToList() ?? new List<int>();
+}
+
+<h2>Edit Enclosure</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <!-- Naam -->
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+    </div>
+
+    <!-- Size -->
+    <div class="form-group">
+        <label for="Size">Size</label>
+        <input type="number" class="form-control" id="Size" name="Size" value="@Model.Size" required />
+    </div>
+
+    <!-- SecurityLevel -->
+    <div class="form-group">
+        <label for="SecurityLevel">Security Level</label>
+        <select class="form-control" id="SecurityLevel" name="SecurityLevel">
+            @foreach (var value in Enum.GetValues(typeof(VirtualZooShared.Enums.SecurityLevel)))
+            {
+                <option value="@value" selected="@(Model.SecurityLevel == (VirtualZooShared.Enums.SecurityLevel)value)">
+                    @value
+                </option>
+            }
+        </select>
+    </div>
+
+    <!-- Climate -->
+    <div class="form-group">
+        <label for="Climate">Climate</label>
+        <select class="form-control" id="Climate" name="Climate">
+            @foreach (var value in Enum.GetValues(typeof(VirtualZooShared.Enums.Climate)))
+            {
+                <option value="@value" selected="@(Model.Climate == (VirtualZooShared.Enums.Climate)value)">
+                    @value
+                </option>
+            }
+        </select>
+    </div>
+
+    <!-- HabitatType -->
+    <div class="form-group">
+        <label for="HabitatType">Habitat Type</label>
+        <select class="form-control" id="HabitatType" name="HabitatType">
+            @foreach (var value in Enum.GetValues(typeof(VirtualZooShared.Enums.HabitatType)))
+            {
+                <option value="@value" selected="@(Model.HabitatType == (VirtualZooShared.Enums.HabitatType)value)">
+                    @value
+                </option>
+            }
+        </select>
+    </div>
+
+    <!-- ZooId -->
+    <input type="hidden" name="ZooId" value="@Model.ZooId" />
+
+    <!-- Dieren koppelen -->
+    <div class="form-group">
+        <label for="AnimalIds">Assign Animals</label>
+        <select class="form-control" id="AnimalIds" name="AnimalIds" multiple>
+            @foreach (var animal in animals)
+            {
+                var isSelected = assignedAnimalIds.Contains(animal.Id) ? "selected" : "";
+                @:<option value="@animal.Id" @Html.Raw(isSelected)>@animal.Name (@animal.Species)</option>
+
+            }
+        </select>
+
+        <small class="form-text text-muted">Gebruik Ctrl of Cmd om meerdere dieren te selecteren.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
