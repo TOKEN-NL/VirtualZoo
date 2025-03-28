@@ -178,7 +178,7 @@ Bij Het bouwen van de API heb ik gebruik gemaakt van Swagger. Ik heb geprobeerd 
 1. Installeer de vereisten:
 * .NET 8 SDK
 * Visual Studio 2022+ (met ASP.NET en Entity Framework workloads)
-* SQL Server (bijv. SQL Server Developer, Express, of LocalDB)
+* SQL Server (LocalDB)
 2. Clone deze repo
 3. Open het project en update database `dotnet ef database update --project VirtualZooAPI` 
 4. Start de app via Visual Studio (Keuze uit de API `VirtualZooAPI` of de frontend `VirtualZoo`)`)
