@@ -52,6 +52,7 @@ Het project is opgesplitst in duidelijke lagen:
 
 maak wireframes
 
+#*komt nog*#
 
 ![Wireframe van Zoo Dashboard](docs/wireframes/zoo_dashboard.png)
 
@@ -60,7 +61,6 @@ maak wireframes
 ### 4. **Entity-Relationship Diagram (ERD)**
 
 ![ERD van de VirtualZoo](Docs/ERD.svg)
-(klik op de afbeelding voor een duidelijker beeld van de relaties)
 
 ---
 
@@ -172,10 +172,13 @@ maak wireframes
 
 ### 7. **Installatie-instructies**
 
-1. Clone deze repo
-2. Zorg voor .NET 8 SDK
-3. Update database `dotnet ef database update --project VirtualZooAPI` 
-4. Start de app via Visual Studio
+1. Installeer de vereisten:
+* .NET 8 SDK
+* Visual Studio 2022+ (met ASP.NET en Entity Framework workloads)
+* SQL Server (bijv. SQL Server Developer, Express, of LocalDB)
+2. Clone deze repo
+3. Open het project en update database `dotnet ef database update --project VirtualZooAPI` 
+4. Start de app via Visual Studio (Keuze uit de API `VirtualZooAPI` of de frontend `VirtualZoo`)`)
 
 
 
