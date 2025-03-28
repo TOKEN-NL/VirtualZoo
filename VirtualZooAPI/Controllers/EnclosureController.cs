@@ -21,7 +21,7 @@ namespace VirtualZooAPI.Controllers
         /// Haalt alle verblijven op.
         /// </summary>
         [HttpGet]
-        [SwaggerOperation(Summary = "Get all enclosures", Description = "Returns a list of all enclosures in the zoo.")]
+        [SwaggerOperation(Summary = "Haal alle verblijven op", Description = "Returns a list of all enclosures in the zoo.")]
         [SwaggerResponse(200, "Successfully retrieved list of enclosures", typeof(IEnumerable<Enclosure>))]
         public async Task<ActionResult<IEnumerable<Enclosure>>> GetEnclosures()
         {
@@ -33,7 +33,7 @@ namespace VirtualZooAPI.Controllers
         /// </summary>
         /// <param name="id">ID van het verblijf</param>
         [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Get an enclosure by ID", Description = "Returns a single enclosure based on the given ID.")]
+        [SwaggerOperation(Summary = "Haal een verblijf op", Description = "Returns a single enclosure based on the given ID.")]
         [SwaggerResponse(200, "Successfully retrieved the enclosure", typeof(Enclosure))]
         [SwaggerResponse(404, "Enclosure not found")]
         public async Task<ActionResult<Enclosure>> GetEnclosure(int id)
@@ -48,7 +48,7 @@ namespace VirtualZooAPI.Controllers
         /// </summary>
         /// <param name="enclosure">Het verblijf dat toegevoegd moet worden</param>
         [HttpPost]
-        [SwaggerOperation(Summary = "Add a new enclosure", Description = "Creates a new enclosure in the system.")]
+        [SwaggerOperation(Summary = "Voeg een verblijf toe", Description = "Creates a new enclosure in the system.")]
         [SwaggerResponse(201, "Enclosure successfully created", typeof(Enclosure))]
         [SwaggerResponse(400, "Invalid enclosure data")]
         public async Task<ActionResult> AddEnclosure([FromBody] Enclosure enclosure)
@@ -64,7 +64,7 @@ namespace VirtualZooAPI.Controllers
         /// <param name="id">ID van het verblijf</param>
         /// <param name="enclosure">Het gewijzigde verblijf</param>
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Update an existing enclosure", Description = "Updates the data of an existing enclosure.")]
+        [SwaggerOperation(Summary = "Update een verblijf", Description = "Updates the data of an existing enclosure.")]
         [SwaggerResponse(204, "Enclosure successfully updated")]
         [SwaggerResponse(400, "ID mismatch or invalid data")]
         public async Task<ActionResult> UpdateEnclosure(int id, [FromBody] Enclosure enclosure)
@@ -79,7 +79,7 @@ namespace VirtualZooAPI.Controllers
         /// </summary>
         /// <param name="id">ID van het verblijf</param>
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Delete an enclosure", Description = "Deletes the specified enclosure by ID.")]
+        [SwaggerOperation(Summary = "Delete een verblijf", Description = "Deletes the specified enclosure by ID.")]
         [SwaggerResponse(204, "Enclosure successfully deleted")]
         public async Task<ActionResult> DeleteEnclosure(int id)
         {
