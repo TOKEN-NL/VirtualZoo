@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Result";
+}
+@model List<string>
+
+<h2>Result</h2>
+
+@if (@Model?.Any() == true)
+{
+    <ul>
+        @foreach (var msg in Model)
+        {
+            <li>@msg</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Something went wrong.</p>
+}
+
+<a href="/Zoo" class="btn btn-secondary mt-3">Back</a>

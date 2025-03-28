@@ -23,6 +23,11 @@ builder.Services.AddScoped<IZooService, ZooService>();
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add HttpClient for API calls
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7134/");
+});
 
 var app = builder.Build();
 
